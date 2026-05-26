@@ -1,0 +1,5 @@
+com/facturador/database/database.class
+com/facturador/model/User.class
+com/facturador/model/User$Builder.class
+com/facturador/Main.class
+com/facturador/repository/UserRepository.class
