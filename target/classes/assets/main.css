@@ -1,0 +1,176 @@
+/* ── Topbar ── */
+.topbar {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #1e293b, #162032);
+    -fx-padding: 14 28;
+    -fx-border-color: transparent transparent #2d4a7a transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0.2, 0, 4);
+}
+
+/* ── TabPane ── */
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #0a0f1e;
+}
+
+.tab-pane .tab {
+    -fx-background-color: transparent;
+    -fx-padding: 10 24;
+    -fx-border-color: transparent;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #3b82f6 transparent;
+    -fx-border-width: 0 0 2 0;
+}
+
+.tab-pane .tab .tab-label {
+    -fx-text-fill: #475569;
+    -fx-font-size: 13px;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 0.5;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: #3b82f6;
+}
+
+.tab-pane .tab:hover .tab-label {
+    -fx-text-fill: #94a3b8;
+}
+
+.tab-content {
+    -fx-background-color: #080d1a;
+    -fx-padding: 0;
+}
+
+/* ── Toolbar de la tab ── */
+.tab-toolbar {
+    -fx-background-color: #0f172a;
+    -fx-padding: 14 20;
+    -fx-border-color: transparent transparent #1e293b transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* ── Tabla ── */
+.table-view {
+    -fx-background-color: #080d1a;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.table-view .virtual-flow .clipped-container {
+    -fx-background-color: #080d1a;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #0d1424;
+    -fx-border-color: transparent transparent #1e3a5f transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent #1e293b transparent transparent;
+    -fx-border-width: 0 1 0 0;
+    -fx-padding: 0 12;
+    -fx-size: 44px;
+}
+
+.table-view .column-header:last-visible {
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #3b82f6;
+    -fx-font-size: 11px;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1.2;
+}
+
+.table-view .filler {
+    -fx-background-color: #0d1424;
+    -fx-border-color: transparent transparent #1e3a5f transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* ── Filas ── */
+.table-view .table-row-cell {
+    -fx-background-color: #080d1a;
+    -fx-border-color: transparent transparent #0f1a2e transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-cell-size: 46px;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #0a1020;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #111d35;
+    -fx-border-color: transparent transparent #1e3a5f transparent;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #1a3a6e;
+    -fx-border-color: transparent transparent #2d5aa0 transparent;
+}
+
+.table-view .table-row-cell:selected .table-cell {
+    -fx-text-fill: #e2e8f0;
+}
+
+/* ── Celdas ── */
+.table-view .table-cell {
+    -fx-text-fill: #cbd5e1;
+    -fx-font-size: 13px;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-padding: 0 14;
+    -fx-border-color: transparent #0f1a2e transparent transparent;
+    -fx-border-width: 0 1 0 0;
+    -fx-alignment: CENTER;
+}
+
+.table-view .table-cell:last-visible {
+    -fx-border-color: transparent;
+}
+
+/* Primera columna con acento */
+.table-view .table-cell:first-visible {
+    -fx-text-fill: #f1f5f9;
+    -fx-font-weight: bold;
+}
+
+/* ── Scrollbar ── */
+.table-view .scroll-bar:vertical {
+    -fx-background-color: #080d1a;
+    -fx-pref-width: 8px;
+}
+
+.table-view .scroll-bar:vertical .thumb {
+    -fx-background-color: #1e3a5f;
+    -fx-background-radius: 4;
+}
+
+.table-view .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #2d5aa0;
+}
+
+.table-view .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.table-view .scroll-bar .increment-button,
+.table-view .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-pref-height: 0;
+}
+
+/* ── Placeholder (tabla vacía) ── */
+.table-view .placeholder .label {
+    -fx-text-fill: #334155;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 13px;
+}

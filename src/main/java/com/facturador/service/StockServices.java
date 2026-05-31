@@ -1,7 +1,10 @@
 package com.facturador.service;
 
+import java.util.List;
+
 import com.facturador.model.Producto;
 import com.facturador.repository.StockRepository;
+import com.facturador.utils.Utils;
 
 public class StockServices {
     private final StockRepository StockRepository;
@@ -15,6 +18,12 @@ public class StockServices {
             throw new IllegalArgumentException("Name no puede estar vacío, price debe ser mayor a 0 y stock no puede ser negativo");
         }
 
+        String code = Utils.generarEAN13(producto.getId());
+
+        producto = producto.toBuilder()
+        .code(code)
+        .build();
+
         this.StockRepository.createStock(producto);
     }
 
@@ -26,7 +35,7 @@ public class StockServices {
         this.StockRepository.modifyStock(producto);
     }
 
-    public Producto getStock(int offset, int limit) {
+    public List<Producto> getStock(int offset, int limit) {
         if (offset < 0 || limit <= 0) {
             throw new IllegalArgumentException("Rangos de busqueda no válidos");
         }

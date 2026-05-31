@@ -17,7 +17,7 @@ public class AuthRepository {
     }
 
     public boolean Login(String user, String password) {
-        String sql = "SELECT * FROM users WHERE email = ? and password = ?";
+        String sql = "SELECT * FROM users WHERE name = ? and password = ?";
 
         try (
             Connection conn = this.db.connect();
@@ -36,7 +36,7 @@ public class AuthRepository {
                 .telefono(rs.getString("telefono"))
                 .role(rs.getString("role"))
                 .build();
-
+                
                 return true;
             } else {
                 return false;

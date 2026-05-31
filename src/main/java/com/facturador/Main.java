@@ -15,6 +15,9 @@ public class Main extends Application {
 
         Scene scene = new Scene(loginView.getView(), 400, 300);
 
+        scene.getStylesheets().add(getClass().getResource("/assets/login.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/assets/main.css").toExternalForm());
+
         stage.setTitle("Facturador");
         stage.setScene(scene);
         stage.show();
