@@ -1,7 +1,7 @@
 /* ── Fondo general ── */
 .root {
     -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #0a0f1e, #0f172a, #1a2744);
-    -fx-padding: 40;
+    -fx-padding: 0;
     -fx-font-family: "JetBrains Mono Nerd Font";
 }
 

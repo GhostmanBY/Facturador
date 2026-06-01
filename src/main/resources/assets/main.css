@@ -174,3 +174,51 @@
     -fx-font-family: "JetBrains Mono Nerd Font";
     -fx-font-size: 13px;
 }
+
+.button-danger {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 13px;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-weight: bold;
+    -fx-padding: 10 16;
+    -fx-background-radius: 10;
+    -fx-border-color: #ef4444;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-cursor: hand;
+}
+
+.button-danger:hover {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+}
+
+.button-danger:pressed {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+}
+
+.context-menu {
+    -fx-background-color: #1e293b;
+    -fx-border-color: #334155;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 4;
+}
+
+.menu-item {
+    -fx-background-color: transparent;
+    -fx-padding: 8 16;
+}
+
+.menu-item .label {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 13px;
+}
+
+.menu-item:hover {
+    -fx-background-color: #334155;
+    -fx-background-radius: 6;
+}

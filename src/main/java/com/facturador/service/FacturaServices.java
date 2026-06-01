@@ -1,7 +1,5 @@
 package com.facturador.service;
 
-import org.w3c.dom.ranges.RangeException;
-
 import com.facturador.model.Factura;
 import com.facturador.repository.FacturaRepository;
 

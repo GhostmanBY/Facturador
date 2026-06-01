@@ -51,7 +51,7 @@ public class StockRepository {
     }
 
     public void modifyStock(Producto producto) {
-        String sql = "UPDATE productos SET name = ?, description = ?, code = ? ,price = ?, stock = ? WHERE id_producto = ?";
+        String sql = "UPDATE productos SET name = ?, description = ?, code = ? ,price = ?, stock = ? WHERE id = ?";
 
         try (
             Connection conn = this.db.connect();
@@ -91,7 +91,7 @@ public class StockRepository {
     }
 
     public Producto getStockById(int id) {
-        String sql = "SELECT * FROM productos WHERE id_producto = ?";
+        String sql = "SELECT * FROM productos WHERE id = ?";
 
         try (
             Connection conn = this.db.connect(); 
@@ -125,7 +125,7 @@ public class StockRepository {
     }
 
     public void deactivateStock(int id) {
-        String sql = "UPDATE productos SET active = false WHERE id_producto = ?";
+        String sql = "UPDATE productos SET active = false WHERE id = ?";
 
         try (
             Connection conn = this.db.connect();

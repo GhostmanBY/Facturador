@@ -20,6 +20,7 @@ import com.facturador.model.User;
 public class MainView {
     private StockController stockController;
     private VBox root;
+    private ObservableList<Producto> datos;
 
     public MainView(Stage stage, User user) {
         this.stockController = new StockController();
@@ -30,10 +31,20 @@ public class MainView {
         Label userRole = new Label(user.getRole());
         userRole.getStyleClass().add("label-subtitle");
 
+        Button btn_logout = new Button("Cerrar Sesion");
+        btn_logout.getStyleClass().add("button-danger");
+        btn_logout.setOnAction(e -> {
+            LoginView loginView = new LoginView(stage);
+            stage.getScene().setRoot(loginView.getView());
+        });
+
         VBox userInfo = new VBox(userName, userRole);
         userInfo.setAlignment(Pos.CENTER_LEFT);
 
-        HBox topbar = new HBox(userInfo);
+        VBox logout = new VBox(btn_logout);
+        logout.setAlignment(Pos.CENTER_RIGHT);
+
+        HBox topbar = new HBox(userInfo, logout);
         topbar.getStyleClass().add("topbar");
         topbar.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(userInfo, Priority.ALWAYS);
@@ -81,7 +92,7 @@ public class MainView {
         tabla.getColumns().add(colStock);
 
         List<Producto> listado = this.stockController.getStock(0, 20);
-        ObservableList<Producto> datos = FXCollections.observableArrayList(listado);
+        datos = FXCollections.observableArrayList(listado);
         tabla.setItems(datos);
         VBox.setVgrow(tabla, Priority.ALWAYS);
 
@@ -91,6 +102,51 @@ public class MainView {
 
         Button btnAgregar = new Button("+ Nuevo producto");
         btnAgregar.getStyleClass().add("button");
+        btnAgregar.setOnAction(e -> {
+                DialogViewNewProducto dialog = new DialogViewNewProducto();
+                dialog.abrirDialog().ifPresent( producto -> {
+                        this.stockController.createStock(producto);
+                        datos.setAll(stockController.getStock(0, 20));
+                    }
+                );
+            }
+        );
+
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem editar = new MenuItem("Editar");
+        MenuItem eliminar = new MenuItem("Eliminar");
+
+        contextMenu.getItems().addAll(editar, eliminar);
+
+        tabla.setRowFactory(tv -> {
+            TableRow<Producto> row = new TableRow<>();
+            row.setOnContextMenuRequested(e -> {
+                if (!row.isEmpty()) {
+                    contextMenu.show(row, e.getScreenX(), e.getScreenY());
+                }
+            });
+            return row;
+        });
+
+        editar.setOnAction(e -> {
+            Producto seleccionado = tabla.getSelectionModel().getSelectedItem();
+            if (seleccionado != null) {
+                DialogViewNewProducto dialog = new DialogViewNewProducto(seleccionado);
+                dialog.abrirDialog().ifPresent( producto -> {
+                        this.stockController.modifyStock(producto);
+                        datos.setAll(stockController.getStock(0, 20));
+                    }
+                );
+            }
+        });
+
+        // eliminar.setOnAction(e -> {
+        //     Producto seleccionado = tabla.getSelectionModel().getSelectedItem();
+        //     if (seleccionado != null) {
+        //         System.out.println("Eliminar: " + seleccionado.getName());
+        //     }
+        // });
 
         HBox toolbar = new HBox(12, buscador, btnAgregar);
         toolbar.setAlignment(Pos.CENTER_LEFT);
