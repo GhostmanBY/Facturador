@@ -31,7 +31,6 @@ public class DialogViewNewProducto {
         dialog.getDialogPane().getStylesheets().add(
             getClass().getResource("/assets/login.css").toExternalForm()
         );
-        //dialog.getDialogPane().getStyleClass().add("card-form");
 
         TextField txtNombre = new TextField();
         txtNombre.setPromptText("Nombre");
@@ -99,7 +98,6 @@ public class DialogViewNewProducto {
                         .price(Double.parseDouble(txtPrecio.getText().trim().replace(",", ".")))
                         .stock(Integer.parseInt(txtStock.getText().trim()));
 
-                    // Si es edición, conservar el id y el code
                     if (esEdicion) {
                         builder.id(productoExistente.getId())
                         .code(productoExistente.getCode());

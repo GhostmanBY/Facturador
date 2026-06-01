@@ -141,12 +141,12 @@ public class MainView {
             }
         });
 
-        // eliminar.setOnAction(e -> {
-        //     Producto seleccionado = tabla.getSelectionModel().getSelectedItem();
-        //     if (seleccionado != null) {
-        //         System.out.println("Eliminar: " + seleccionado.getName());
-        //     }
-        // });
+        eliminar.setOnAction(e -> {
+            Producto seleccionado = tabla.getSelectionModel().getSelectedItem();
+            if (seleccionado != null) {
+                
+            }
+        });
 
         HBox toolbar = new HBox(12, buscador, btnAgregar);
         toolbar.setAlignment(Pos.CENTER_LEFT);
