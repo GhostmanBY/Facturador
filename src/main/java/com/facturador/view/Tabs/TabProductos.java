@@ -68,6 +68,18 @@ public class TabProductos {
         TextField buscador = new TextField();
         buscador.setPromptText("Buscar Producto...");
         buscador.getStyleClass().add("text-field");
+        buscador.textProperty().addListener((obs, oldText, newText) -> {
+            String filtro = newText.toLowerCase();
+            ObservableList<Producto> filtrados = FXCollections.observableArrayList();
+
+            for (Producto p : datos) {
+                if (p.getName().toLowerCase().contains(filtro) || p.getDescription().toLowerCase().contains(filtro)) {
+                    filtrados.add(p);
+                }
+            }
+
+            tabla.setItems(filtrados);
+        });
 
         Button btnAgregar = new Button("+ Nuevo producto");
         btnAgregar.getStyleClass().add("button");

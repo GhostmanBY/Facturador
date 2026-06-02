@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -25,6 +26,11 @@ public class MainView {
     private StockController stockController;
     private VBox root;
     private ObservableList<Producto> datos;
+    private Label lblSubValor = new Label("$ 0.00");
+    private Label lblDescuentoValor = new Label("$ 0.00");
+    private Label lblImpuestosValor = new Label("$ 0.00");
+    private Label lblTotalValor = new Label("$ 0.00");
+    private ObservableList<ProductFactura> itemsFactura;
 
     public MainView(Stage stage, User user) {
         this.stockController = new StockController();
@@ -116,8 +122,7 @@ public class MainView {
         tablaFactura.getColumns().add(colDesc);
         tablaFactura.getColumns().add(colSubtotal);
 
-        ObservableList<ProductFactura> itemsFactura =
-        FXCollections.observableArrayList();
+        itemsFactura = FXCollections.observableArrayList();
 
         tablaFactura.setItems(itemsFactura);
 
@@ -125,30 +130,59 @@ public class MainView {
             tablaProductos,
             itemsFactura
         );
+        
+        Label tituloProductos = new Label("Productos");
+        tituloProductos.getStyleClass().add("label-title");
 
         TextField txtBuscar = new TextField();
         txtBuscar.setPromptText("Buscar producto...");
         txtBuscar.getStyleClass().add("text-field");
+        txtBuscar.setAlignment(Pos.CENTER_LEFT);
+        
+        HBox searchBox = new HBox(tituloProductos, txtBuscar);
+        searchBox.getStyleClass().add("search-box");
+        searchBox.setAlignment(Pos.CENTER_LEFT);
+        searchBox.setPrefHeight(70);
+        
+        HBox.setHgrow(txtBuscar, Priority.ALWAYS);
+        txtBuscar.setMaxWidth(Double.MAX_VALUE);
+        HBox.setMargin(tituloProductos, new Insets(0, 0, 0, 10));
+        HBox.setMargin(txtBuscar, new Insets(10, 10, 10, 10));
+        txtBuscar.textProperty().addListener((obs, oldText, newText) -> {
+            String filtro = newText.toLowerCase();
+            ObservableList<Producto> filtrados = FXCollections.observableArrayList();
 
-        Label tituloProductos = new Label("Productos");
-        tituloProductos.getStyleClass().add("label-title");
+            for (Producto p : datos) {
+                if (p.getName().toLowerCase().contains(filtro)) {
+                    filtrados.add(p);
+                }
+            }
 
-        Label tituloFactura = new Label("Factura");
-        tituloFactura.getStyleClass().add("label-title");
+            tablaProductos.setItems(filtrados);
+        });
 
         VBox panelProductos = new VBox(
-            12,
-            tituloProductos,
-            txtBuscar,
+            searchBox,
             tablaProductos
         );
-
         panelProductos.getStyleClass().add("factura-panel");
+        
         VBox.setVgrow(tablaProductos, Priority.ALWAYS);
+        
+        Label tituloFactura = new Label("Factura");
+        tituloFactura.getStyleClass().add("label-title");
+        tituloFactura.setAlignment(Pos.CENTER_LEFT);
+
+        HBox headerFactura = new HBox(
+            tituloFactura,
+            new Region() // espacio vacío
+        );
+        HBox.setMargin(tituloFactura, new Insets(0, 0, 0, 10));
+        headerFactura.setAlignment(Pos.CENTER_LEFT);
+        headerFactura.setPrefHeight(70);
 
         VBox panelFactura = new VBox(
-            12,
-            tituloFactura,
+            headerFactura,
             tablaFactura
         );
 
@@ -162,10 +196,25 @@ public class MainView {
 
         splitPane.setDividerPositions(0.5);
 
-        Label lblSubtotal = new Label("Subtotal: $0");
-        Label lblDescuento = new Label("Descuento: $0");
-        Label lblImpuestos = new Label("Impuestos: $0");
-        Label lblTotal = new Label("TOTAL: $0");
+        Label lblSubtotal = new Label("Subtotal: ");
+        lblSubValor.getStyleClass().add("factura-values");
+        HBox subtotalBox = new HBox(lblSubtotal, lblSubValor);
+        subtotalBox.getStyleClass().add("factura-resumen-item");
+
+        Label lblDescuento = new Label("Descuento: ");
+        lblDescuentoValor.getStyleClass().add("factura-values");
+        HBox descuentoBox = new HBox(lblDescuento, lblDescuentoValor);
+        descuentoBox.getStyleClass().add("factura-resumen-item");
+
+        Label lblImpuestos = new Label("Impuestos: ");
+        lblImpuestosValor.getStyleClass().add("factura-values");
+        HBox impuestosBox = new HBox(lblImpuestos, lblImpuestosValor);
+        impuestosBox.getStyleClass().add("factura-resumen-item");
+
+        Label lblTotal = new Label("TOTAL: ");
+        lblTotalValor.getStyleClass().add("factura-total-value");
+        HBox totalBox = new HBox(lblTotal, lblTotalValor);
+        totalBox.getStyleClass().add("factura-total");
 
         lblSubtotal.getStyleClass().add("factura-resumen-item");
         lblDescuento.getStyleClass().add("factura-resumen-item");
@@ -174,10 +223,10 @@ public class MainView {
         lblTotal.getStyleClass().add("factura-total");
 
         HBox resumen = new HBox(
-            lblSubtotal,
-            lblDescuento,
-            lblImpuestos,
-            lblTotal
+            subtotalBox,
+            descuentoBox,
+            impuestosBox,
+            totalBox
         );
         resumen.getStyleClass().add("factura-resumen-bar");
 
@@ -266,19 +315,20 @@ public class MainView {
                                 return;
                             }
 
-                            existente.toBuilder()
+                            int index = itemsFactura.indexOf(existente);
+
+                            ProductFactura actualizado = existente.toBuilder()
                             .cantidad(nuevaCantidad)
+                            .subtotal(
+                                calcularSubtotal(
+                                    nuevaCantidad,
+                                    producto.getPrice(),
+                                    existente.getDescuento()
+                                )
+                            )
                             .build();
-
-                            existente.toBuilder()
-                            .subtotal(calcularSubtotal(nuevaCantidad, producto.getPrice(), existente.getDescuento()))
-                            .build();
-
-                            producto.toBuilder()
-                            .stock(producto.getStock() - nuevaCantidad)
-                            .build();
-
-                            tablaProductos.refresh();
+                        
+                            itemsFactura.set(index, actualizado);
                         } else {
                             ProductFactura item = ProductFactura.builder()
                                 .productoid(producto.getId())
@@ -288,15 +338,17 @@ public class MainView {
                                 .descuento(descuento)
                                 .subtotal(calcularSubtotal(cantidad, producto.getPrice(), descuento))
                                 .isActive(true)
-                                .build();
-
-                            producto.toBuilder()
-                            .stock(producto.getStock() - cantidad)
-                            .build();
-                            
+                                .build();                            
                             itemsFactura.add(item);
-                            tablaProductos.refresh();
                         }
+                        
+                        actualizarResumenFactura();
+                        tablaProductos.refresh();
+                        int index = tablaProductos.getItems().indexOf(producto);
+                        Producto actualizado = producto.toBuilder()
+                        .stock(producto.getStock() - cantidad)
+                        .build();
+                        tablaProductos.getItems().set(index, actualizado);
                     } catch (NumberFormatException ex) {
                         mostrarError("Ingrese números válidos");
                     }
@@ -306,7 +358,6 @@ public class MainView {
             return row;
         });
     }
-
 
     private double calcularSubtotal(int cantidad, double precio,double descuento) {
         double subtotal = cantidad * precio;
@@ -318,6 +369,26 @@ public class MainView {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    private void actualizarResumenFactura() {
+        double subtotal = 0;
+        double descuento = 0;
+
+        for (ProductFactura item : itemsFactura) {
+            double bruto = item.getCantidad() * item.getPrecioUnitario();
+
+            subtotal += bruto;
+            descuento += bruto * item.getDescuento() / 100;
+        }
+
+        double impuestos = 0; // por ahora
+        double total = subtotal - descuento + impuestos;
+
+        lblSubValor.setText(String.format("$ %.2f", subtotal));
+        lblDescuentoValor.setText(String.format("$ %.2f", descuento));
+        lblImpuestosValor.setText(String.format("$ %.2f", impuestos));
+        lblTotalValor.setText(String.format("$ %.2f", total));
     }
 
     public Parent getView() {
