@@ -1,0 +1,78 @@
+.factura-footer {
+    -fx-background-color: #0d1424;
+    -fx-padding: 18;
+    -fx-border-color: #1e293b transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+
+.factura-resumen {
+    -fx-alignment: center-left;
+}
+
+.factura-resumen-labels {
+    -fx-spacing: 8;
+}
+
+.factura-resumen-values {
+    -fx-spacing: 8;
+    -fx-alignment: center-right;
+}
+
+.factura-resumen-labels .label,
+.factura-resumen-values .label {
+    -fx-text-fill: #cbd5e1;
+    -fx-font-size: 13px;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+}
+
+.factura-total-label {
+    -fx-text-fill: #3b82f6;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.factura-total-value {
+    -fx-text-fill: #3b82f6;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.factura-footer {
+    -fx-background-color: #0d1424;
+    -fx-padding: 18;
+    -fx-spacing: 20;
+    -fx-alignment: center-left;
+    -fx-border-color: #1e293b transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+
+.factura-resumen-bar {
+    -fx-spacing: 30;
+    -fx-alignment: center-left;
+}
+
+.factura-resumen-item {
+    -fx-text-fill: #cbd5e1;
+    -fx-font-size: 13px;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+}
+
+.factura-total {
+    -fx-text-fill: #3b82f6;
+    -fx-font-size: 18px;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-weight: bold;
+}
+
+.split-pane {
+    -fx-background-color: #080d1a;
+}
+
+.split-pane-divider {
+    -fx-background-color: #1e293b;
+    -fx-padding: 1;
+}
+
+.split-pane-divider:hover {
+    -fx-background-color: #3b82f6;
+}

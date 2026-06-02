@@ -1,29 +1,35 @@
 package com.facturador.view;
 
-import java.util.List;
-
-import com.facturador.controller.StockController;
-import com.facturador.model.Producto;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import com.facturador.model.User;
 
+import com.facturador.model.Producto;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.facturador.controller.StockController;
+import com.facturador.model.ProductFactura;
+import com.facturador.model.User;
+import com.facturador.view.Tabs.TabProductos;
 public class MainView {
+    private TabProductos tabProductos;
     private StockController stockController;
     private VBox root;
     private ObservableList<Producto> datos;
 
     public MainView(Stage stage, User user) {
         this.stockController = new StockController();
+
+        this.tabProductos = new TabProductos();
 
         Label userName = new Label(user.getName());
         userName.getStyleClass().add("label-title");
@@ -51,11 +57,11 @@ public class MainView {
 
         Tab tabProductos = new Tab("Productos");
         tabProductos.setClosable(false);
-        tabProductos.setContent(buildProductosTab());
+        tabProductos.setContent(this.tabProductos.buildProductosTab());
 
         Tab tabFacturas = new Tab("Facturas");
         tabFacturas.setClosable(false);
-        tabFacturas.setContent(new Label("Próximamente..."));
+        tabFacturas.setContent(buildFacturasTab());
 
         TabPane tabPane = new TabPane(tabProductos, tabFacturas);
         tabPane.getStyleClass().add("tab-pane");
@@ -65,100 +71,253 @@ public class MainView {
         root.getStyleClass().add("root");
     }
 
-    private VBox buildProductosTab() {
-        TableView<Producto> tabla = new TableView<>();
-        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-        tabla.getStyleClass().add("table-view");
-
+    private Parent buildFacturasTab() {
+        TableView<Producto> tablaProductos = new TableView<>();
+        tablaProductos.getStyleClass().add("table-view");
+        
         TableColumn<Producto, String> colNombre = new TableColumn<>("Nombre");
         colNombre.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getName()));
-
-        TableColumn<Producto, String> colDesc = new TableColumn<>("Descripción");
-        colDesc.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDescription()));
-
-        TableColumn<Producto, String> colCodigo = new TableColumn<>("Código");
-        colCodigo.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getCode()));
-
-        TableColumn<Producto, Double> colPrecio = new TableColumn<>("Precio");
-        colPrecio.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getPrice()).asObject());
-
         TableColumn<Producto, Integer> colStock = new TableColumn<>("Stock");
         colStock.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getStock()).asObject());
-        
-        tabla.getColumns().add(colNombre);
-        tabla.getColumns().add(colDesc);
-        tabla.getColumns().add(colCodigo);
-        tabla.getColumns().add(colPrecio);
-        tabla.getColumns().add(colStock);
+        TableColumn<Producto, Double> colPrice = new TableColumn<>("Precio");
+        colPrice.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getPrice()).asObject());
+
+        tablaProductos.getColumns().add(colNombre);
+        tablaProductos.getColumns().add(colStock);
+        tablaProductos.getColumns().add(colPrice);
 
         List<Producto> listado = this.stockController.getStock(0, 20);
         datos = FXCollections.observableArrayList(listado);
-        tabla.setItems(datos);
-        VBox.setVgrow(tabla, Priority.ALWAYS);
+        tablaProductos.setItems(datos);
+        VBox.setVgrow(tablaProductos, Priority.ALWAYS);
 
-        TextField buscador = new TextField();
-        buscador.setPromptText("Buscar Producto...");
-        buscador.getStyleClass().add("text-field");
 
-        Button btnAgregar = new Button("+ Nuevo producto");
-        btnAgregar.getStyleClass().add("button");
-        btnAgregar.setOnAction(e -> {
-                DialogViewNewProducto dialog = new DialogViewNewProducto();
-                dialog.abrirDialog().ifPresent( producto -> {
-                        this.stockController.createStock(producto);
-                        datos.setAll(stockController.getStock(0, 20));
-                    }
-                );
-            }
+        TableView<ProductFactura> tablaFactura = new TableView<>();
+        tablaFactura.getStyleClass().add("table-view");
+
+        TableColumn<ProductFactura, String> colNombreF = new TableColumn<>("Nombre");
+        colNombreF.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getName()));
+
+        TableColumn<ProductFactura, Integer> colCantidad = new TableColumn<>("Cant.");
+        colCantidad.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getCantidad()).asObject());
+
+        TableColumn<ProductFactura, Double> colUnitario = new TableColumn<>("P. Unit.");
+        colUnitario.setCellValueFactory(c ->new SimpleDoubleProperty(c.getValue().getPrecioUnitario()).asObject());
+
+        TableColumn<ProductFactura, Double> colDesc = new TableColumn<>("Desc %");
+        colDesc.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getDescuento()).asObject());
+
+        TableColumn<ProductFactura, Double> colSubtotal = new TableColumn<>("Subtotal");
+        colSubtotal.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getSubtotal()).asObject());
+
+        tablaFactura.getColumns().add(colNombreF);
+        tablaFactura.getColumns().add(colCantidad);
+        tablaFactura.getColumns().add(colUnitario);
+        tablaFactura.getColumns().add(colDesc);
+        tablaFactura.getColumns().add(colSubtotal);
+
+        ObservableList<ProductFactura> itemsFactura =
+        FXCollections.observableArrayList();
+
+        tablaFactura.setItems(itemsFactura);
+
+        configurarAgregarProductos(
+            tablaProductos,
+            itemsFactura
         );
 
-        ContextMenu contextMenu = new ContextMenu();
+        TextField txtBuscar = new TextField();
+        txtBuscar.setPromptText("Buscar producto...");
+        txtBuscar.getStyleClass().add("text-field");
 
-        MenuItem editar = new MenuItem("Editar");
-        MenuItem eliminar = new MenuItem("Eliminar");
+        Label tituloProductos = new Label("Productos");
+        tituloProductos.getStyleClass().add("label-title");
 
-        contextMenu.getItems().addAll(editar, eliminar);
+        Label tituloFactura = new Label("Factura");
+        tituloFactura.getStyleClass().add("label-title");
 
-        tabla.setRowFactory(tv -> {
+        VBox panelProductos = new VBox(
+            12,
+            tituloProductos,
+            txtBuscar,
+            tablaProductos
+        );
+
+        panelProductos.getStyleClass().add("factura-panel");
+        VBox.setVgrow(tablaProductos, Priority.ALWAYS);
+
+        VBox panelFactura = new VBox(
+            12,
+            tituloFactura,
+            tablaFactura
+        );
+
+        panelFactura.getStyleClass().add("factura-panel");
+        VBox.setVgrow(tablaFactura, Priority.ALWAYS);
+
+        SplitPane splitPane = new SplitPane(
+            panelProductos,
+            panelFactura
+        );
+
+        splitPane.setDividerPositions(0.5);
+
+        Label lblSubtotal = new Label("Subtotal: $0");
+        Label lblDescuento = new Label("Descuento: $0");
+        Label lblImpuestos = new Label("Impuestos: $0");
+        Label lblTotal = new Label("TOTAL: $0");
+
+        lblSubtotal.getStyleClass().add("factura-resumen-item");
+        lblDescuento.getStyleClass().add("factura-resumen-item");
+        lblImpuestos.getStyleClass().add("factura-resumen-item");
+
+        lblTotal.getStyleClass().add("factura-total");
+
+        HBox resumen = new HBox(
+            lblSubtotal,
+            lblDescuento,
+            lblImpuestos,
+            lblTotal
+        );
+        resumen.getStyleClass().add("factura-resumen-bar");
+
+        Button btnGenerar = new Button("Generar Factura");
+        btnGenerar.getStyleClass().add("button");
+
+        HBox.setHgrow(resumen, Priority.ALWAYS);
+
+        HBox footer = new HBox(
+            resumen,
+            btnGenerar
+        );
+
+        footer.setAlignment(Pos.CENTER_LEFT);
+        footer.getStyleClass().add("factura-footer");
+
+        BorderPane root = new BorderPane();
+        root.setCenter(splitPane);
+        root.setBottom(footer);
+
+        return root;
+    }
+    
+    private void configurarAgregarProductos(TableView<Producto> tablaProductos, ObservableList<ProductFactura> itemsFactura) {
+        tablaProductos.setRowFactory(tv -> {
             TableRow<Producto> row = new TableRow<>();
-            row.setOnContextMenuRequested(e -> {
-                if (!row.isEmpty()) {
-                    contextMenu.show(row, e.getScreenX(), e.getScreenY());
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    Producto producto = row.getItem();
+                    Dialog<ButtonType> dialog = new Dialog<>();
+                    dialog.setTitle("Agregar producto");
+
+                    TextField txtCantidad = new TextField("1");
+                    TextField txtDescuento = new TextField("0");
+                    Label lblError = new Label();
+                    lblError.setStyle("-fx-text-fill: red;");
+
+                    VBox content = new VBox(
+                        10,
+                        new Label("Cantidad"),
+                        txtCantidad,
+                        new Label("Descuento (%)"),
+                        txtDescuento,
+                        lblError
+                    );
+                    dialog.getDialogPane().setContent(content);
+
+                    ButtonType btnAgregar = new ButtonType("Agregar", ButtonBar.ButtonData.OK_DONE);
+                    dialog.getDialogPane().getButtonTypes().addAll(btnAgregar, ButtonType.CANCEL);
+
+                    Optional<ButtonType> result = dialog.showAndWait();
+
+                    if (result.isEmpty() || result.get() != btnAgregar) {
+                        return;
+                    }
+
+                    try {
+                        int cantidad = Integer.parseInt(txtCantidad.getText());
+                        double descuento = Double.parseDouble(txtDescuento.getText());
+
+                        if (cantidad <= 0) {
+                            mostrarError("La cantidad debe ser mayor a cero");
+                            return;
+                        }
+
+                        if (cantidad > producto.getStock()) {
+                            mostrarError("Stock insuficiente");
+                            return;
+                        }
+
+                        if (descuento < 0 || descuento > 100) {
+                            mostrarError("El descuento debe estar entre 0 y 100");
+                            return;
+                        }
+
+                        ProductFactura existente = itemsFactura.stream()
+                            .filter(p -> p.getProductoid() == producto.getId())
+                            .findFirst()
+                            .orElse(null);
+
+                        if (existente != null) {
+                            int nuevaCantidad = existente.getCantidad() + cantidad;
+
+                            if (nuevaCantidad > producto.getStock()) {
+                                mostrarError("Stock insuficiente");
+                                return;
+                            }
+
+                            existente.toBuilder()
+                            .cantidad(nuevaCantidad)
+                            .build();
+
+                            existente.toBuilder()
+                            .subtotal(calcularSubtotal(nuevaCantidad, producto.getPrice(), existente.getDescuento()))
+                            .build();
+
+                            producto.toBuilder()
+                            .stock(producto.getStock() - nuevaCantidad)
+                            .build();
+
+                            tablaProductos.refresh();
+                        } else {
+                            ProductFactura item = ProductFactura.builder()
+                                .productoid(producto.getId())
+                                .cantidad(cantidad)
+                                .name(producto.getName())
+                                .precioUnitario(producto.getPrice())
+                                .descuento(descuento)
+                                .subtotal(calcularSubtotal(cantidad, producto.getPrice(), descuento))
+                                .isActive(true)
+                                .build();
+
+                            producto.toBuilder()
+                            .stock(producto.getStock() - cantidad)
+                            .build();
+                            
+                            itemsFactura.add(item);
+                            tablaProductos.refresh();
+                        }
+                    } catch (NumberFormatException ex) {
+                        mostrarError("Ingrese números válidos");
+                    }
                 }
             });
+
             return row;
         });
+    }
 
-        editar.setOnAction(e -> {
-            Producto seleccionado = tabla.getSelectionModel().getSelectedItem();
-            if (seleccionado != null) {
-                DialogViewNewProducto dialog = new DialogViewNewProducto(seleccionado);
-                dialog.abrirDialog().ifPresent( producto -> {
-                        this.stockController.modifyStock(producto);
-                        datos.setAll(stockController.getStock(0, 20));
-                    }
-                );
-            }
-        });
 
-        eliminar.setOnAction(e -> {
-            Producto seleccionado = tabla.getSelectionModel().getSelectedItem();
-            if (seleccionado != null) {
-                
-            }
-        });
+    private double calcularSubtotal(int cantidad, double precio,double descuento) {
+        double subtotal = cantidad * precio;
+        return subtotal - (subtotal * descuento / 100);
+    }
 
-        HBox toolbar = new HBox(12, buscador, btnAgregar);
-        toolbar.setAlignment(Pos.CENTER_LEFT);
-        toolbar.setPadding(new Insets(12, 16, 8, 16));
-        toolbar.getStyleClass().add("tab-toolbar");
-        HBox.setHgrow(buscador, Priority.ALWAYS);
-
-        VBox content = new VBox(toolbar, tabla);
-        VBox.setVgrow(content, Priority.ALWAYS);
-        content.getStyleClass().add("tab-content");
-
-        return content;
+    private void mostrarError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     public Parent getView() {

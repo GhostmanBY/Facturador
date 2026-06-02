@@ -21,7 +21,6 @@
 .tab-pane .tab:selected {
     -fx-background-color: transparent;
     -fx-border-color: transparent transparent #3b82f6 transparent;
-    -fx-border-width: 0 0 2 0;
 }
 
 .tab-pane .tab .tab-label {
@@ -166,6 +165,11 @@
 .table-view .scroll-bar .decrement-button {
     -fx-background-color: transparent;
     -fx-pref-height: 0;
+}
+
+.table-view .table-row-cell.row-inactivo {
+    -fx-opacity: 0.4;
+    -fx-background-color: gray;
 }
 
 /* ── Placeholder (tabla vacía) ── */

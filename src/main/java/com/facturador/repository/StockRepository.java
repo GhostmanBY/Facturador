@@ -110,7 +110,7 @@ public class StockRepository {
     }
 
     public void activateStock(int id) {
-        String sql = "UPDATE productos SET active = true WHERE id_producto = ?";
+        String sql = "UPDATE productos SET is_active = true WHERE id = ?";
 
         try (
             Connection conn = this.db.connect();
@@ -125,7 +125,7 @@ public class StockRepository {
     }
 
     public void deactivateStock(int id) {
-        String sql = "UPDATE productos SET active = false WHERE id = ?";
+        String sql = "UPDATE productos SET is_active = false WHERE id = ?";
 
         try (
             Connection conn = this.db.connect();

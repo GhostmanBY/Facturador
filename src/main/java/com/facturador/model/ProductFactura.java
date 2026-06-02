@@ -3,6 +3,7 @@ package com.facturador.model;
 public class ProductFactura {
     private int id;
     private int productoid;
+    private String name;
     private int cantidad;
     private double precioUnitario;
     private double descuento;
@@ -13,6 +14,7 @@ public class ProductFactura {
     public static class Builder {
         private int id;
         private int productoid;
+        private String name;
         private int cantidad;
         private double precioUnitario;
         private double descuento;
@@ -27,6 +29,11 @@ public class ProductFactura {
 
         public Builder productoid(int productoid) {
             this.productoid = productoid;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
             return this;
         }
 
@@ -68,6 +75,7 @@ public class ProductFactura {
     private ProductFactura(Builder builder) {
         this.id = builder.id;
         this.productoid = builder.productoid;
+        this.name = builder.name;
         this.cantidad = builder.cantidad;
         this.precioUnitario = builder.precioUnitario;
         this.descuento = builder.descuento;
@@ -80,6 +88,7 @@ public class ProductFactura {
         return new Builder()
         .id(this.id)
         .productoid(this.productoid)
+        .name(this.name)
         .cantidad(this.cantidad)
         .precioUnitario(this.precioUnitario)
         .descuento(this.descuento)
@@ -92,6 +101,7 @@ public class ProductFactura {
 
     public int getId() { return this.id; }
     public int getProductoid() { return this.productoid; }
+    public String getName() { return this.name; }
     public int getCantidad() { return this.cantidad; }
     public double getPrecioUnitario() { return this.precioUnitario; }
     public double getDescuento() { return this.descuento; }
