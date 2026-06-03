@@ -1,5 +1,7 @@
 package com.facturador.service;
 
+import java.util.List;
+
 import com.facturador.model.Factura;
 import com.facturador.repository.FacturaRepository;
 
@@ -10,15 +12,16 @@ public class FacturaServices {
         this.facturaRepository = new FacturaRepository();
     }
 
-    public void createFactura(Factura factura) {
+    public Factura createFactura(Factura factura) {
         try {
-            this.facturaRepository.createFactura(factura);
+            return this.facturaRepository.createFactura(factura);
         } catch (Exception e) {
             System.err.print(e.getMessage());
+            return null;
         }
     }
 
-    public Factura getFactura(int offset, int limit) {
+    public List<Factura> getFactura(int offset, int limit) {
         try {
             return this.facturaRepository.getFactura(offset, limit);
         } catch (Exception e){

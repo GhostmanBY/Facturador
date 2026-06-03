@@ -1,7 +1,7 @@
 package com.facturador.service;
 
+import com.facturador.model.AuthRepository;
 import com.facturador.model.User;
-import com.facturador.repository.AuthRepository;
 
 import org.mindrot.jbcrypt.BCrypt;
 

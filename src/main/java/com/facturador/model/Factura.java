@@ -5,14 +5,22 @@ import java.util.List;
 
 public class Factura {
     private int id;
-    private int proveedorId;
+    private int clienteId;
+    private int vendedorId;
+    private double subtotal;
+    private double descuento;
+    private double impuestos;
     private LocalDate fecha;
     private double total;
     private List<ProductFactura> detalles;
 
     public static class Builder {
         private int id;
-        private int proveedorId;
+        private int clienteId;
+        private int vendedorId;
+        private double subtotal;
+        private double descuento;
+        private double impuestos;
         private LocalDate fecha;
         private double total;
         private List<ProductFactura> detalles;
@@ -22,8 +30,28 @@ public class Factura {
             return this;
         }
 
-        public Builder proveedorId(int proveedorId) {
-            this.proveedorId = proveedorId;
+        public Builder clienteId(int clienteId) {
+            this.clienteId = clienteId;
+            return this;
+        }
+
+        public Builder vendedorId(int vendedorId) {
+            this.vendedorId = vendedorId;
+            return this;
+        }
+
+        public Builder subtotal(double subtotal) {
+            this.subtotal = subtotal;
+            return this;
+        }
+
+        public Builder descuento(double descuento) {
+            this.descuento = descuento;
+            return this;
+        }
+
+        public Builder impuestos(double impuestos) {
+            this.impuestos = impuestos;
             return this;
         }
 
@@ -49,7 +77,11 @@ public class Factura {
 
     private Factura(Builder builder) {
         this.id = builder.id;
-        this.proveedorId = builder.proveedorId;
+        this.clienteId = builder.clienteId;
+        this.vendedorId = builder.vendedorId;
+        this.subtotal = builder.subtotal;
+        this.descuento = builder.descuento;
+        this.impuestos = builder.impuestos;
         this.fecha = builder.fecha;
         this.total = builder.total;
         this.detalles = builder.detalles;
@@ -58,7 +90,14 @@ public class Factura {
     public Builder toBuilder() {
         return new Builder()
         .id(this.id)
-        .proveedorId(this.proveedorId)
+        .clienteId(this.clienteId)
+        .vendedorId(this.vendedorId)
+        .subtotal(this.subtotal)
+        .descuento(this.descuento)
+        .impuestos(this.impuestos)
+        .fecha(this.fecha)
+        .total(this.total)
+        .detalles(this.detalles)
         .fecha(this.fecha)
         .total(this.total)
         .detalles(this.detalles);
@@ -67,7 +106,11 @@ public class Factura {
     public static Builder builder() { return new Builder(); }
 
     public int getId() { return this.id; }
-    public int getProveedoreId() { return this.proveedorId; }
+    public int getClienteId() { return this.clienteId; }
+    public int getVendedorId() { return this.vendedorId; }
+    public double getSubtotal() { return this.subtotal; }
+    public double getDescuento() { return this.descuento; }
+    public double getImpuestos() { return this.impuestos; }
     public LocalDate getFecha() { return this.fecha; }
     public double getTotal() { return this.total; }
     public List<ProductFactura> getDetalles() { return this.detalles; }

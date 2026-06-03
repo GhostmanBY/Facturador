@@ -2,10 +2,9 @@ com/facturador/model/Producto.class
 com/facturador/view/LoginView.class
 com/facturador/controller/AuthController.class
 com/facturador/repository/FacturaRepository.class
-com/facturador/repository/ProRepository.class
 com/facturador/model/User.class
-com/facturador/model/Producto$Builder.class
 com/facturador/model/User$Builder.class
+com/facturador/model/Producto$Builder.class
 com/facturador/repository/StockRepository.class
 com/facturador/Main.class
 com/facturador/controller/UserController.class
@@ -18,6 +17,4 @@ com/facturador/model/Factura.class
 com/facturador/model/ProductFactura$Builder.class
 com/facturador/model/Factura$Builder.class
 com/facturador/model/ProductFactura.class
-com/facturador/service/ProServices.class
 com/facturador/service/StockServices.class
-com/facturador/repository/AuthRepository.class

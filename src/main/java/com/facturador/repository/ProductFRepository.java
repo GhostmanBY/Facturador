@@ -3,16 +3,18 @@ package com.facturador.repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.Connection;
 
 import com.facturador.model.Factura;
 import com.facturador.model.ProductFactura;
 import com.facturador.database.database;
 
-public class ProRepository {
+public class ProductFRepository {
     private database db;
 
-    public ProRepository() {
+    public ProductFRepository() {
         this.db = new database();
     }
 
@@ -31,35 +33,34 @@ public class ProRepository {
     }
 
     public void createDetailFactura(ProductFactura detalle) {
-        String sql = "INSERT INTO detalle_factura (producto_id, cantidad, precioUni, total, factura_id) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO product_factura (producto_id, cantidad, precio_unitario, factura_id, subtotal, descuento) VALUES (?, ?, ?, ?, ?, ?)";
         try (
             Connection conn = this.db.connect(); 
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, detalle.getProductoid());
             stmt.setInt(2, detalle.getCantidad());
             stmt.setDouble(3, detalle.getPrecioUnitario());
-            stmt.setDouble(4, detalle.getSubtotal());
-            stmt.setInt(5, detalle.getFacturaId());
+            stmt.setInt(4, detalle.getFacturaId());
+            stmt.setDouble(5, detalle.getSubtotal());
+            stmt.setDouble(6, detalle.getDescuento());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public ProductFactura getDetailFactura(Factura factura, int offset, int limit) {
-        String sql = "SELECT * FROM detalle_factura WHERE factura_id = ? OFFSET ? LIMIT ?";
+    public List<ProductFactura> getDetailFactura(Factura factura) {
+        String sql = "SELECT * FROM product_factura WHERE factura_id = ?";
         try (
             Connection conn = this.db.connect(); 
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, factura.getId());
-            stmt.setInt(2, offset);
-            stmt.setInt(3, limit);
             ResultSet resultado = stmt.executeQuery();
-            if (resultado.next()) {
-                return mapDetailFactura(resultado);
+            List<ProductFactura> detalles = new ArrayList<>();
+            while (resultado.next()) {
+                detalles.add(mapDetailFactura(resultado));
             }
-            return null;
-
+            return detalles;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

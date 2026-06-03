@@ -1,5 +1,6 @@
 package com.facturador.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.facturador.model.Producto;
@@ -33,7 +34,7 @@ public class StockController {
             return this.stockservices.getStock(offset, limit);
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            return null;
+            return Collections.emptyList();
         }
     }
 
