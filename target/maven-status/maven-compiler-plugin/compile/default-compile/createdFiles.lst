@@ -3,8 +3,8 @@ com/facturador/view/LoginView.class
 com/facturador/controller/AuthController.class
 com/facturador/repository/FacturaRepository.class
 com/facturador/model/User.class
-com/facturador/model/User$Builder.class
 com/facturador/model/Producto$Builder.class
+com/facturador/model/User$Builder.class
 com/facturador/repository/StockRepository.class
 com/facturador/Main.class
 com/facturador/controller/UserController.class

@@ -1,4 +1,4 @@
-package com.facturador.view;
+package com.facturador.view.Dialog;
 
 import java.util.Optional;
 import com.facturador.model.Producto;
@@ -10,14 +10,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
-public class DialogViewNewProducto {
+public class DialogNuevoProducto {
     private final Producto productoExistente;
 
-    public DialogViewNewProducto() {
+    public DialogNuevoProducto() {
         this.productoExistente = null;
     }
 
-    public DialogViewNewProducto(Producto producto) {
+    public DialogNuevoProducto(Producto producto) {
         this.productoExistente = producto;
     }
 

@@ -15,6 +15,9 @@ import javafx.stage.Stage;
 
 import com.facturador.model.Producto;
 
+import com.facturador.view.Tabs.TabProductos;
+import com.facturador.view.Tabs.TabFacturas;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +27,6 @@ import com.facturador.controller.ProductFController;
 import com.facturador.controller.ClienteController;
 import com.facturador.model.ProductFactura;
 import com.facturador.model.User;
-import com.facturador.view.Tabs.TabProductos;
 import com.facturador.model.Cliente;
 import com.facturador.model.DProFactura;
 import com.facturador.model.Factura;
@@ -32,6 +34,7 @@ import com.facturador.utils.Utils;
 
 public class MainView {
     private TabProductos tabProductos;
+    private TabFacturas tabfacturas;
     private StockController stockController;
     private FacturaController facturaController;
     private ProductFController productFController;
@@ -49,13 +52,13 @@ public class MainView {
     private User user;
 
     public MainView(Stage stage, User user) {
-        this.user = user;
         this.stockController = new StockController();
         this.facturaController = new FacturaController();
         this.productFController = new ProductFController();
         this.clienteController = new ClienteController();
         this.utils = new Utils();
         this.tabProductos = new TabProductos();
+        this.tabfacturas = new TabFacturas(user);
 
         Label userName = new Label(user.getName());
         userName.getStyleClass().add("label-title");
@@ -87,7 +90,7 @@ public class MainView {
 
         Tab tabFacturas = new Tab("Facturas");
         tabFacturas.setClosable(false);
-        tabFacturas.setContent(buildFacturasTab());
+        tabFacturas.setContent(this.tabfacturas.buildFacturasTab());
 
         TabPane tabPane = new TabPane(tabProductos, tabFacturas);
         tabPane.getStyleClass().add("tab-pane");
@@ -709,8 +712,6 @@ public class MainView {
         for (ProductFactura item : itemsFactura) {
             this.productFController.createDetailFactura(item);
         }
-
-
     }
 
     public Parent getView() {

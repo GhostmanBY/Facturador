@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.facturador.controller.StockController;
 import com.facturador.model.Producto;
-import com.facturador.view.DialogViewNewProducto;
+import com.facturador.view.Dialog.DialogNuevoProducto;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -21,6 +21,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -84,7 +85,7 @@ public class TabProductos {
         Button btnAgregar = new Button("+ Nuevo producto");
         btnAgregar.getStyleClass().add("button");
         btnAgregar.setOnAction(e -> {
-                DialogViewNewProducto dialog = new DialogViewNewProducto();
+                DialogNuevoProducto dialog = new DialogNuevoProducto();
                 dialog.abrirDialog().ifPresent( producto -> {
                         this.stockController.createStock(producto);
                         datos.setAll(stockController.getStock(0, 20));
@@ -99,14 +100,13 @@ public class TabProductos {
         MenuItem activar = new MenuItem("Activar");
         MenuItem desactivar = new MenuItem("desactivar");
 
+        
         tabla.setRowFactory(tv -> new TableRow<>() {
             {
                 setOnContextMenuRequested(e -> {
                     if (!isEmpty()) {
                         Producto producto = getItem();
-
                         contextMenu.getItems().clear();
-
                         contextMenu.getItems().add(editar);
 
                         if (producto.getIsActive()) {
@@ -114,12 +114,10 @@ public class TabProductos {
                         } else {
                             contextMenu.getItems().add(activar);
                         }
-
                         contextMenu.show(this,e.getScreenX(), e.getScreenY());
                     }
                 });
             }
-
             @Override
             protected void updateItem(Producto item, boolean empty) {
                 super.updateItem(item, empty);
@@ -135,7 +133,7 @@ public class TabProductos {
         editar.setOnAction(e -> {
             Producto seleccionado = tabla.getSelectionModel().getSelectedItem();
             if (seleccionado != null) {
-                DialogViewNewProducto dialog = new DialogViewNewProducto(seleccionado);
+                DialogNuevoProducto dialog = new DialogNuevoProducto(seleccionado);
                 dialog.abrirDialog().ifPresent( producto -> {
                         this.stockController.modifyStock(producto);
                         datos.setAll(stockController.getStock(0, 20));

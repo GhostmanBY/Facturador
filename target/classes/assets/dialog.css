@@ -1,0 +1,180 @@
+/* ── DialogPane base ── */
+.dialog-pane {
+    -fx-background-color: #0f172a;
+    -fx-border-color: #1e3a5f;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 0;
+}
+
+/* ── Header ── */
+.dialog-pane .header-panel {
+    -fx-background-color: #0d1424;
+    -fx-padding: 14 18;
+    -fx-border-color: transparent transparent #1e3a5f transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-radius: 12 12 0 0;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 0.5;
+}
+
+/* ── Content (VBox con dialog-header-custom) ── */
+.dialog-header-custom {
+    -fx-padding: 18;
+    -fx-spacing: 6;
+    -fx-background-color: #0f172a;
+}
+
+/* ── Labels de campo ── */
+.dialog-subtitle-label {
+    -fx-text-fill: #475569;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+/* ── TextFields ── */
+.dialog-pane .text-field {
+    -fx-background-color: #080d1a;
+    -fx-border-color: #1e293b;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: #cbd5e1;
+    -fx-prompt-text-fill: #334155;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 13px;
+    -fx-padding: 9 12;
+}
+
+.dialog-pane .text-field:focused {
+    -fx-border-color: #3b82f6;
+}
+
+/* ── Button bar ── */
+.dialog-pane .button-bar {
+    -fx-padding: 14 18;
+    -fx-background-color: #0f172a;
+    -fx-border-color: #1e293b transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+
+.dialog-pane .button-bar .button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #64748b;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 9 18;
+    -fx-background-radius: 8;
+    -fx-border-color: #334155;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
+}
+
+.dialog-pane .button-bar .button:hover {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #94a3b8;
+}
+
+.dialog-pane .button-bar .button.default-button {
+    -fx-text-fill: #3b82f6;
+    -fx-border-color: #3b82f6;
+}
+
+.dialog-pane .button-bar .button.default-button:hover {
+    -fx-background-color: #3b82f6;
+    -fx-text-fill: white;
+}
+
+/*Genera Factura*/
+/* ── Sección labels ── */
+.dialog-section-label {
+    -fx-text-fill: #475569;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+/* ── ComboBox ── */
+.dialog-combo {
+    -fx-background-color: #080d1a;
+    -fx-border-color: #1e293b;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 12px;
+}
+
+.dialog-combo .list-cell {
+    -fx-text-fill: #cbd5e1;
+    -fx-background-color: #080d1a;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 12px;
+    -fx-padding: 6 12;
+}
+
+.dialog-combo:hover {
+    -fx-border-color: #3b82f6;
+}
+
+/* ── Campos de resumen ── */
+.dialog-field-label {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.dialog-field-input {
+    -fx-background-color: #080d1a;
+    -fx-border-color: #1e293b;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: #64748b;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 13px;
+    -fx-padding: 9 12;
+}
+
+.dialog-field-highlight {
+    -fx-text-fill: #3b82f6;
+    -fx-border-color: #1e3a5f;
+    -fx-font-weight: bold;
+}
+
+/* ── Separador ── */
+.dialog-sep {
+    -fx-background-color: #1e293b;
+    -fx-padding: 0;
+}
+
+/* ── Botón chico (Crear Cliente) ── */
+.btn-sm {
+    -fx-background-color: transparent;
+    -fx-text-fill: #64748b;
+    -fx-border-color: #334155;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 9 14;
+    -fx-cursor: hand;
+}
+
+.btn-sm:hover {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #94a3b8;
+}
