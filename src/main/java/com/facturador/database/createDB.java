@@ -20,7 +20,7 @@ public class createDB {
         String sql = "SHOW DATABASES LIKE 'facturador'";
 
         try (
-            Connection conn = this.db.connect();
+            Connection conn = db.connect();
             PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
             ResultSet rs = stmt.executeQuery();
@@ -35,7 +35,7 @@ public class createDB {
         String sql = "CREATE SCHEMA facurador";
 
         try (
-            Connection conn = this.db.connect();
+            Connection conn = db.connect();
             PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
             stmt.executeQuery();
@@ -58,7 +58,7 @@ public class createDB {
         """;
 
         try (
-            Connection conn = this.db.connect();
+            Connection conn = db.connect();
             PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
             stmt.execute();
@@ -81,7 +81,7 @@ public class createDB {
         """;
 
         try (
-            Connection conn = this.db.connect();
+            Connection conn = db.connect();
             PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
             stmt.execute();

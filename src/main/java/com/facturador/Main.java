@@ -3,6 +3,7 @@ package com.facturador;
 import java.sql.SQLException;
 
 import com.facturador.database.createDB;
+import com.facturador.database.datosStarter;
 import com.facturador.view.LoginView;
 
 import javafx.application.Application;
@@ -18,6 +19,7 @@ public class Main extends Application {
             try {
                 createdb.createDatabase();
                 createdb.createTables();
+                new datosStarter();
             } catch (SQLException e) {
                 e.printStackTrace();
                 return;
