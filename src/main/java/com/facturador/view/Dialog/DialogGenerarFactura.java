@@ -84,8 +84,12 @@ public class DialogGenerarFactura {
 
             ComboBox<String> cbClientes = new ComboBox<>();
             cbClientes.setPromptText("Seleccionar Cliente");
-            this.clienteController.getClientes().forEach(c -> 
-                cbClientes.getItems().add(c.getNombre() + " (ID: " + c.getId() + ")")
+            cbClientes.getItems().setAll(
+                this.clienteController.getClientes()
+                    .stream()
+                    .filter(c -> c.isActive())
+                    .map(c -> c.getNombre() + " (ID: " + c.getId() + ")")
+                    .toList()
             );
             cbClientes.getStyleClass().add("dialog-combo");
             cbClientes.setMaxWidth(Double.MAX_VALUE);
