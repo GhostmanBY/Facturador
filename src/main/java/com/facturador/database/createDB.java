@@ -144,18 +144,8 @@ public class createDB {
                 descuento DECIMAL(10,2) NOT NULL DEFAULT 0,
                 subtotal DECIMAL(10,2) NOT NULL,
                 is_active BOOLEAN NOT NULL DEFAULT TRUE,
-
-                CONSTRAINT fk_product_factura_factura
-                    FOREIGN KEY (factura_id)
-                    REFERENCES facturas(id)
-                    ON UPDATE CASCADE
-                    ON DELETE CASCADE,
-
-                CONSTRAINT fk_product_factura_producto
-                    FOREIGN KEY (producto_id)
-                    REFERENCES productos(id)
-                    ON UPDATE CASCADE
-                    ON DELETE RESTRICT
+                FOREIGN KEY (factura_id) REFERENCES facturas(id),
+                FOREIGN KEY (producto_id) REFERENCES productos(id)
             )
         """;
 
