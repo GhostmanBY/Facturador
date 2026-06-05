@@ -35,12 +35,8 @@ public class StockServices {
         this.StockRepository.modifyStock(producto);
     }
 
-    public List<Producto> getStock(int offset, int limit) {
-        if (offset < 0 || limit <= 0) {
-            throw new IllegalArgumentException("Rangos de busqueda no válidos");
-        }
-
-        return this.StockRepository.getStock(offset, limit);
+    public List<Producto> getStock() {
+        return this.StockRepository.getStock();
     }
 
     public Producto getStockById(int id) {

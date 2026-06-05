@@ -71,15 +71,13 @@ public class StockRepository {
         }
     }
 
-    public List<Producto> getStock(int offset, int limit) {
-        String sql = "SELECT * FROM productos LIMIT ? OFFSET ?";
+    public List<Producto> getStock() {
+        String sql = "SELECT * FROM productos";
         List<Producto> productos = new ArrayList<>();
         try (
             Connection conn = this.db.connect();
             PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
-            stmt.setInt(1, limit);
-            stmt.setInt(2, offset);
             ResultSet resultado = stmt.executeQuery();
             while (resultado.next()) {
                 productos.add(mapProducto(resultado));

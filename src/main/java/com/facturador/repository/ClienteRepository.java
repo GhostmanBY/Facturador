@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.facturador.database.database;
 import com.facturador.model.Cliente;
-import com.facturador.model.User;
 
 public class ClienteRepository {
     private database db;

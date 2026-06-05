@@ -29,9 +29,9 @@ public class StockController {
         }
     }
 
-    public List<Producto> getStock(int offset, int limit) {
+    public List<Producto> getStock() {
         try {
-            return this.stockservices.getStock(offset, limit);
+            return this.stockservices.getStock();
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return Collections.emptyList();

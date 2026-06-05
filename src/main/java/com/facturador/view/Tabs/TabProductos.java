@@ -60,7 +60,7 @@ public class TabProductos {
         tabla.getColumns().add(colPrecio);
         tabla.getColumns().add(colStock);
 
-        List<Producto> listado = this.stockController.getStock(0, 20);
+        List<Producto> listado = this.stockController.getStock();
         datos = FXCollections.observableArrayList(listado);
         tabla.setItems(datos);
         VBox.setVgrow(tabla, Priority.ALWAYS);
@@ -87,7 +87,7 @@ public class TabProductos {
                 DialogNuevoProducto dialog = new DialogNuevoProducto();
                 dialog.abrirDialog().ifPresent( producto -> {
                         this.stockController.createStock(producto);
-                        datos.setAll(stockController.getStock(0, 20));
+                        datos.setAll(stockController.getStock());
                     }
                 );
             }
@@ -135,7 +135,7 @@ public class TabProductos {
                 DialogNuevoProducto dialog = new DialogNuevoProducto(seleccionado);
                 dialog.abrirDialog().ifPresent( producto -> {
                         this.stockController.modifyStock(producto);
-                        datos.setAll(stockController.getStock(0, 20));
+                        datos.setAll(stockController.getStock());
                     }
                 );
             }
@@ -145,7 +145,7 @@ public class TabProductos {
             Producto seleccionado = tabla.getSelectionModel().getSelectedItem();
             if (seleccionado != null) {
                 this.stockController.activateStock(seleccionado.getId());
-                datos.setAll(stockController.getStock(0, 20));
+                datos.setAll(stockController.getStock());
             }
         });
 
@@ -153,7 +153,7 @@ public class TabProductos {
             Producto seleccionado = tabla.getSelectionModel().getSelectedItem();
             if (seleccionado != null) {
                 this.stockController.deactivateStock(seleccionado.getId());
-                datos.setAll(stockController.getStock(0, 20));
+                datos.setAll(stockController.getStock());
             }
         });
 

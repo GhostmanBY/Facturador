@@ -1,6 +1,5 @@
 package com.facturador.view;
 
-import javafx.animation.FadeTransition;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -9,17 +8,19 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import com.facturador.controller.AuthController;
+import com.facturador.model.User;
+import com.facturador.view.Helpers.ErrorAlert;
 
 public class LoginView {
-
     private final AuthController authController;
     private final VBox root;
+    private ErrorAlert alert;
 
     public LoginView(Stage stage) {
         this.authController = new AuthController();
+        this.alert = new ErrorAlert();
 
         Label title = new Label("Mega Facturador++");
         title.getStyleClass().add("label-title");
@@ -50,26 +51,29 @@ public class LoginView {
         errorLabel.setVisible(false);
 
         btnLogin.setOnAction(e -> {
+
             boolean loginOk = authController.Login(
                 usuario.getText(),
                 password.getText()
             );
 
-            if (loginOk) {
-                MainView mainView = new MainView(stage, this.authController.getUserActual());
-                stage.getScene().setRoot(mainView.getView());
-            } else {
-                errorLabel.setVisible(true);
-                errorLabel.setOpacity(0);
+            User userActual = this.authController.getUserActual();
 
-                FadeTransition ft = new FadeTransition(
-                    Duration.millis(200),
-                    errorLabel
-                );
-                ft.setFromValue(0);
-                ft.setToValue(1);
-                ft.play();
+
+            if (userActual == null) {
+                this.alert.mostrarError("Usuario o contraseña incorrectos");
+                return;
             }
+            
+            if (!userActual.isActive()){
+                this.alert.mostrarError("Usted a sido dado de baja, comunique con su superior");
+                return;
+            }
+
+            if (loginOk) {
+                MainView mainView = new MainView(stage, userActual);
+                stage.getScene().setRoot(mainView.getView());
+            } 
         });
 
         VBox cardForm = new VBox(

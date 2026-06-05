@@ -1,8 +1,6 @@
 package com.facturador;
 
 import com.facturador.view.LoginView;
-import com.facturador.view.MainView;
-import com.facturador.model.User;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -12,14 +10,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        User user = User.builder()
-        .id(1)
-        .name("Nahuel Romero")
-        .email("nahuel@example.com")
-        .role(User.UserRole.valueOf("ADMIN"))
-        .build();
-
-        MainView loginView = new MainView(stage, user);
+        LoginView loginView = new LoginView(stage);
 
         Scene scene = new Scene(loginView.getView(), 400, 300);
 

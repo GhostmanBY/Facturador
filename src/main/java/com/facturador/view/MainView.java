@@ -12,6 +12,7 @@ import com.facturador.view.Tabs.TabViewFacturas;
 import com.facturador.view.Tabs.TabAdministracion;
 
 import com.facturador.model.User;
+import com.facturador.model.User.UserRole;
 
 public class MainView {
     private TabProductos tabProductos;
@@ -70,9 +71,22 @@ public class MainView {
         Tab tabadministrador = new Tab("Panel Administrador");
         tabadministrador.setClosable(false);
         tabadministrador.setContent(this.tabadministracion.buildAdministracionTab());
-        
 
-        TabPane tabPane = new TabPane(tabProductos, tabgenfacturas, tabviewfacturas, tabadministrador);
+        TabPane tabPane = new TabPane();
+
+        if (user.getRole() == UserRole.REPOSITOR || user.getRole() == UserRole.ADMIN) {
+            tabPane.getTabs().add(tabProductos);
+        }
+        
+        if (user.getRole() == UserRole.CAJERO || user.getRole() == UserRole.ADMIN) {
+            tabPane.getTabs().add(tabgenfacturas);
+            tabPane.getTabs().add(tabviewfacturas);
+        }
+        
+        if (user.getRole() == UserRole.ADMIN) {
+            tabPane.getTabs().add(tabadministrador);
+        }
+        
         tabPane.getStyleClass().add("tab-pane");
         VBox.setVgrow(tabPane, Priority.ALWAYS);
 

@@ -72,7 +72,11 @@ public class TabGenFacturas {
         tablaProductos.getColumns().add(colStock);
         tablaProductos.getColumns().add(colPrice);
 
-        List<Producto> listado = this.stockController.getStock(0, 20);
+        List<Producto> listado = this.stockController.getStock()
+        .stream()
+        .filter(producto -> producto.getIsActive())
+        .toList();
+
         datos = FXCollections.observableArrayList(listado);
         tablaProductos.setItems(datos);
         VBox.setVgrow(tablaProductos, Priority.ALWAYS);
