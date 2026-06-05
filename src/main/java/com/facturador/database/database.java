@@ -19,4 +19,13 @@ public class database {
 
         return DriverManager.getConnection(url, user, pass);
     }
+
+    public Connection connectSinBase() throws SQLException {
+        String host = dotenv.get("DB_HOST");
+        String port = dotenv.get("DB_PORT");
+        String usuario = dotenv.get("DB_USER");
+        String contrasena = dotenv.get("DB_PASSWORD");
+        String url = "jdbc:mariadb://" + host + ":" + port + "/";
+        return DriverManager.getConnection(url, usuario, contrasena);
+    }
 }

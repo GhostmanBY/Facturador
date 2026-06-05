@@ -38,7 +38,6 @@ public class AuthRepository {
                 .role(User.UserRole.valueOf(rs.getString("role")))
                 .build();
                 
-                System.out.print(this.userActual.getName());
                 return true;
             } else {
                 return false;

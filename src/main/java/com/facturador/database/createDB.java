@@ -5,7 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 public class createDB {
+    public static final Dotenv dotenv = Dotenv.load();
+
     private database db = new database();
 
     public void createTables() throws SQLException {
@@ -20,7 +24,7 @@ public class createDB {
         String sql = "SHOW DATABASES LIKE 'facturador'";
 
         try (
-            Connection conn = db.connect();
+            Connection conn = db.connectSinBase();
             PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
             ResultSet rs = stmt.executeQuery();
@@ -32,10 +36,10 @@ public class createDB {
     }
 
     public void createDatabase() throws SQLException {
-        String sql = "CREATE SCHEMA facurador";
+        String sql = "CREATE SCHEMA " + dotenv.get("DB_NAME");
 
         try (
-            Connection conn = db.connect();
+            Connection conn = db.connectSinBase();
             PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
             stmt.executeQuery();

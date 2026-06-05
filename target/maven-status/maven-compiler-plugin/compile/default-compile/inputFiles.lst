@@ -13,6 +13,7 @@
 /home/shadow/Escritorio/Repos/Facturador/src/main/java/com/facturador/model/AuthRepository.java
 /home/shadow/Escritorio/Repos/Facturador/src/main/java/com/facturador/model/Cliente.java
 /home/shadow/Escritorio/Repos/Facturador/src/main/java/com/facturador/view/Tabs/TabViewFacturas.java
+/home/shadow/Escritorio/Repos/Facturador/src/main/java/com/facturador/database/datosStarter.java
 /home/shadow/Escritorio/Repos/Facturador/src/main/java/com/facturador/controller/StockController.java
 /home/shadow/Escritorio/Repos/Facturador/src/main/java/com/facturador/model/Factura.java
 /home/shadow/Escritorio/Repos/Facturador/src/main/java/com/facturador/service/ClienteServices.java
@@ -29,6 +30,7 @@
 /home/shadow/Escritorio/Repos/Facturador/src/main/java/com/facturador/controller/AuthController.java
 /home/shadow/Escritorio/Repos/Facturador/src/main/java/com/facturador/view/Helpers/ErrorAlert.java
 /home/shadow/Escritorio/Repos/Facturador/src/main/java/com/facturador/Main.java
+/home/shadow/Escritorio/Repos/Facturador/src/main/java/com/facturador/Launcher.java
 /home/shadow/Escritorio/Repos/Facturador/src/main/java/com/facturador/model/User.java
 /home/shadow/Escritorio/Repos/Facturador/src/main/java/com/facturador/view/Tabs/TabProductos.java
 /home/shadow/Escritorio/Repos/Facturador/src/main/java/com/facturador/view/Dialog/DialogHelperFactura.java
