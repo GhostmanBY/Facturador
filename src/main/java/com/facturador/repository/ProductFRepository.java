@@ -22,12 +22,12 @@ public class ProductFRepository {
         ProductFactura detalle = new ProductFactura.Builder()
         .id(resultado.getInt("id"))
         .productoid(resultado.getInt("producto_id"))
-        .cantidad(resultado.getInt("cantidad"))
-        .precioUnitario(resultado.getDouble("precioUni"))
-        .descuento(resultado.getDouble("descuento"))
-        .subtotal(resultado.getDouble("total"))
-        .isActive(resultado.getBoolean("is_active"))
         .facturaId(resultado.getInt("factura_id"))
+        .cantidad(resultado.getInt("cantidad"))
+        .precioUnitario(resultado.getDouble("precio_unitario"))
+        .descuento(resultado.getDouble("descuento"))
+        .subtotal(resultado.getDouble("subtotal"))
+        .isActive(resultado.getBoolean("is_active"))
         .build();
         return detalle;
     }

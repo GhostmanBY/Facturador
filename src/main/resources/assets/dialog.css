@@ -178,3 +178,17 @@
     -fx-background-color: #1e293b;
     -fx-text-fill: #94a3b8;
 }
+
+.admin-stat-value-blue {
+    -fx-text-fill: #3b82f6;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.admin-stat-value-amber {
+    -fx-text-fill: #f59e0b;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}

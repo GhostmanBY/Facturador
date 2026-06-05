@@ -9,12 +9,25 @@ import java.util.List;
 
 import com.facturador.database.database;
 import com.facturador.model.Cliente;
+import com.facturador.model.User;
 
 public class ClienteRepository {
     private database db;
 
     public ClienteRepository() {
         this.db = new database();
+    }
+
+    private Cliente mapCliente(ResultSet resultado) throws SQLException {
+        Cliente cliente = new Cliente.Builder()
+        .id(resultado.getInt("id"))
+        .nombre(resultado.getString("nombre"))
+        .direccion(resultado.getString("domicilio"))
+        .telefono(resultado.getString("telefono"))
+        .email(resultado.getString("email"))
+        .isActive(resultado.getBoolean("is_active"))
+        .build();
+        return cliente;
     }
 
     public void createCliente(Cliente cliente) {
@@ -80,15 +93,7 @@ public class ClienteRepository {
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet resultado = stmt.executeQuery();
             while (resultado.next()) {
-                Cliente cliente = new Cliente.Builder()
-                    .id(resultado.getInt("id"))
-                    .nombre(resultado.getString("nombre"))
-                    .direccion(resultado.getString("domicilio"))
-                    .telefono(resultado.getString("telefono"))
-                    .email(resultado.getString("email"))
-                    .isActive(resultado.getBoolean("is_active"))
-                    .build();
-                clientes.add(cliente);
+                clientes.add(mapCliente(resultado));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -104,15 +109,7 @@ public class ClienteRepository {
             stmt.setInt(1, id);
             ResultSet resultado = stmt.executeQuery();
             if (resultado.next()) {
-                Cliente cliente = new Cliente.Builder()
-                    .id(resultado.getInt("id"))
-                    .nombre(resultado.getString("nombre"))
-                    .direccion(resultado.getString("domicilio"))
-                    .telefono(resultado.getString("telefono"))
-                    .email(resultado.getString("email"))
-                    .isActive(resultado.getBoolean("is_active"))
-                    .build();
-                return cliente;
+                return mapCliente(resultado);
             }
             return null;
         } catch (SQLException e) {

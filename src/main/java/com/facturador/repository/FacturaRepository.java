@@ -22,11 +22,11 @@ public class FacturaRepository {
     private Factura mapFactura(ResultSet resultado) throws SQLException {
         Factura factura = new Factura.Builder()
         .id(resultado.getInt("id"))
-        .clienteId(resultado.getInt("clienteId"))
-        .vendedorId(resultado.getInt("vendedorId"))
+        .clienteId(resultado.getInt("cliente_id"))
+        .vendedorId(resultado.getInt("vendedor_id"))
         .subtotal(resultado.getDouble("subtotal"))
         .descuento(resultado.getDouble("descuento"))
-        .impuestos(resultado.getDouble("impuestos"))
+        .impuestos(resultado.getDouble("impuesto"))
         .fecha(resultado.getDate("fecha").toLocalDate())
         .total(resultado.getDouble("total"))
         .build();
@@ -57,14 +57,12 @@ public class FacturaRepository {
         }
     }
 
-    public List<Factura> getFactura(int offset, int limit) {
-        String sql = "SELECT * FROM facturas OFFSET ? LIMIT ?";
+    public List<Factura> getFactura() {
+        String sql = "SELECT * FROM facturas";
         List<Factura> facturas = new ArrayList<>();
         try (
             Connection conn = this.db.connect(); 
             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, offset);
-            stmt.setInt(2, limit);
             ResultSet resultado = stmt.executeQuery();
             while (resultado.next()) {
                 facturas.add(mapFactura(resultado));

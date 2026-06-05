@@ -2,6 +2,8 @@ package com.facturador.service;
 
 import com.facturador.repository.UserRepository;
 
+import java.util.List;
+
 import com.facturador.model.User;
 
 public class UserServices {
@@ -27,11 +29,19 @@ public class UserServices {
         this.userRepository.modifyUser(user);
     }
 
-    public User getUser(int offset, int limit) {
-        if (offset < 0 || limit <= 0) {
-            throw new IllegalArgumentException("Rangos de busqueda no válidos");
-        }
-        
-        return this.userRepository.getUser(offset, limit);
+    public User getUserById(int id) {
+        return this.userRepository.getUserById(id);
+    }
+
+    public List<User> getUser() {
+        return this.userRepository.getUser();
+    }
+
+    public void desactivarUser(User user) {
+        this.userRepository.desactivarUser(user);
+    }
+
+    public void activarUser(User user) {
+        this.userRepository.activarUser(user);
     }
 }

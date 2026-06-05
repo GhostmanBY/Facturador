@@ -33,7 +33,7 @@ public class AuthRepository {
                 .documento(rs.getString("documento"))
                 .domicilio(rs.getString("domicilio"))
                 .telefono(rs.getString("telefono"))
-                .role(rs.getString("role"))
+                .role(User.UserRole.valueOf(rs.getString("role")))
                 .build();
                 
                 return true;

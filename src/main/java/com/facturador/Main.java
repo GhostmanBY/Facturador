@@ -16,7 +16,7 @@ public class Main extends Application {
         .id(1)
         .name("Nahuel Romero")
         .email("nahuel@example.com")
-        .role("Administrador")
+        .role(User.UserRole.valueOf("ADMIN"))
         .build();
 
         MainView loginView = new MainView(stage, user);
@@ -27,6 +27,8 @@ public class Main extends Application {
         scene.getStylesheets().add(getClass().getResource("/assets/main.css").toExternalForm());
         scene.getStylesheets().add(getClass().getResource("/assets/factura.css").toExternalForm());
         scene.getStylesheets().add(getClass().getResource("/assets/dialog.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/assets/facturas.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/assets/panelAdmin.css").toExternalForm());
 
         stage.setTitle("Facturador");
         stage.setScene(scene);

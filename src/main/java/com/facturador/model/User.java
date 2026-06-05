@@ -1,6 +1,13 @@
 package com.facturador.model;
 
+
 public class User {
+    public enum UserRole {
+        ADMIN,
+        CAJERO,
+        REPOSITOR
+    }
+
     private Integer id;
     private String name;
     private String email;
@@ -8,7 +15,8 @@ public class User {
     private String documento;
     private String domicilio;
     private String telefono;
-    private String role;
+    private boolean isActive;
+    private UserRole role;
 
     public static class Builder{
         private Integer id;
@@ -18,7 +26,8 @@ public class User {
         private String documento;
         private String domicilio;
         private String telefono;
-        private String role;
+        private boolean isActive;    
+        private UserRole role;
 
         public Builder id(Integer id) {
             this.id = id;
@@ -55,7 +64,12 @@ public class User {
             return this;
         }
 
-        public Builder role(String role) {
+        public Builder isActive(boolean isActive) {
+            this.isActive = isActive;
+            return this;
+        }
+
+        public Builder role(UserRole role) {
             this.role = role;
             return this;
         }
@@ -73,6 +87,7 @@ public class User {
         this.documento = builder.documento;
         this.domicilio = builder.domicilio;
         this.telefono = builder.telefono;
+        this.isActive = builder.isActive;
         this.role = builder.role;
     }
 
@@ -85,6 +100,7 @@ public class User {
         .documento(this.documento)
         .domicilio(this.domicilio)
         .telefono(this.telefono)
+        .isActive(this.isActive)
         .role(this.role);
     }
 
@@ -97,5 +113,6 @@ public class User {
     public String getDocumento() { return this.documento; }
     public String getDomicilio() { return this.domicilio; }
     public String getTelefono() { return this.telefono; }
-    public String getRole() { return this.role; }
+    public boolean isActive() { return this.isActive; }
+    public UserRole getRole() { return this.role; }
 }

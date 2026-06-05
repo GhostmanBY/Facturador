@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.management.RuntimeErrorException;
 
 import com.facturador.database.database;
 import com.facturador.model.User;
@@ -21,11 +25,12 @@ public class UserRepository {
         .id(resultado.getInt("id"))
         .name(resultado.getString("name"))
         .email(resultado.getString("email"))
-        .hashPassword(resultado.getString("hash_pass"))
+        .hashPassword(resultado.getString("password"))
         .documento(resultado.getString("documento"))
         .domicilio(resultado.getString("domicilio"))
         .telefono(resultado.getString("telefono"))
-        .role(resultado.getString("role"))
+        .isActive(resultado.getBoolean("is_active"))
+        .role(User.UserRole.valueOf(resultado.getString("role")))
         .build();
         return user;
     }
@@ -89,21 +94,48 @@ public class UserRepository {
         }
     }
 
-    public User getUser(int offset, int limit) {
-        String sql = "select * from users offset ? limit ?";
+    public List<User> getUser() {
+        String sql = "select * from users";
+        ArrayList<User> usuairos = new ArrayList<>();
 
         try (Connection conn = this.db.connect(); 
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, offset);
-            stmt.setInt(2, limit);
+            PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
             ResultSet resultado = stmt.executeQuery();
             
-            if (resultado.next()) {
-                return mapUser(resultado);
+            while (resultado.next()) {
+                usuairos.add(mapUser(resultado));
             }
-            return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        return usuairos;
     }
+
+    public void desactivarUser(User user) {
+        String sql = "UPDATE users SET is_active = false  WHERE id = ?";
+
+        try (Connection conn = this.db.connect();
+            PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+           stmt.setInt(1, user.getId());    
+           stmt.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    } 
+
+    public void activarUser(User user) {
+        String sql = "UPDATE users SET is_active = true  WHERE id = ?";
+
+        try (Connection conn = this.db.connect();
+            PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+           stmt.setInt(1, user.getId());     
+           stmt.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    } 
 }

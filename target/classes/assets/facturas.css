@@ -1,0 +1,475 @@
+/* ═══════════════════════════════════════════════
+   TAB FACTURAS
+   ═══════════════════════════════════════════════ */
+
+/* ── Root ── */
+.facturas-root {
+    -fx-background-color: #080d1a;
+    -fx-min-height: 0;
+}
+
+/* ── Panel izquierdo ── */
+.facturas-left {
+    -fx-background-color: #080d1a;
+    -fx-min-height: 0;
+}
+
+/* ── Toolbar ── */
+.facturas-toolbar {
+    -fx-background-color: #0f172a;
+    -fx-padding: 12 16;
+    -fx-border-color: transparent transparent #1e293b transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 8;
+}
+
+.toolbar-label {
+    -fx-text-fill: #475569;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.facturas-search {
+    -fx-background-color: #080d1a;
+    -fx-border-color: #1e293b;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: #cbd5e1;
+    -fx-prompt-text-fill: #334155;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 12px;
+    -fx-padding: 7 12;
+}
+
+.facturas-search:focused {
+    -fx-border-color: #3b82f6;
+}
+
+/* ── DatePicker ── */
+.facturas-datepicker {
+    -fx-background-color: #080d1a;
+    -fx-border-color: #1e293b;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-pref-width: 140px;
+}
+
+.facturas-datepicker .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: #cbd5e1;
+    -fx-prompt-text-fill: #334155;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 12px;
+    -fx-padding: 7 4;
+    -fx-border-color: transparent;
+}
+
+.facturas-datepicker:focused .text-field,
+.facturas-datepicker .text-field:focused {
+    -fx-border-color: transparent;
+}
+
+.facturas-datepicker:focused {
+    -fx-border-color: #3b82f6;
+}
+
+.facturas-datepicker .arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 6;
+}
+
+.facturas-datepicker .arrow-button .arrow {
+    -fx-background-color: #475569;
+    -fx-padding: 3;
+}
+
+.facturas-datepicker .date-picker-popup {
+    -fx-background-color: #0f172a;
+    -fx-border-color: #1e3a5f;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.facturas-datepicker .date-picker-popup .month-year-pane {
+    -fx-background-color: #0d1424;
+    -fx-border-color: transparent transparent #1e293b transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.facturas-datepicker .date-picker-popup .label {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 12px;
+}
+
+.facturas-datepicker .date-picker-popup .day-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94a3b8;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 11px;
+}
+
+.facturas-datepicker .date-picker-popup .day-cell:hover {
+    -fx-background-color: #1e293b;
+    -fx-background-radius: 4;
+}
+
+.facturas-datepicker .date-picker-popup .selected {
+    -fx-background-color: #3b82f6;
+    -fx-background-radius: 4;
+    -fx-text-fill: white;
+}
+
+.facturas-datepicker .date-picker-popup .today {
+    -fx-border-color: #3b82f6;
+    -fx-border-radius: 4;
+}
+
+.facturas-datepicker .date-picker-popup .day-name-cell {
+    -fx-text-fill: #3b82f6;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+/* ── ScrollPane ── */
+.facturas-scroll {
+    -fx-background-color: #080d1a;
+    -fx-background: #080d1a;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.facturas-scroll .viewport {
+    -fx-background-color: #080d1a;
+}
+
+.facturas-scroll .scroll-bar:vertical {
+    -fx-background-color: #080d1a;
+    -fx-pref-width: 8px;
+}
+
+.facturas-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #1e3a5f;
+    -fx-background-radius: 4;
+}
+
+.facturas-scroll .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #2d5aa0;
+}
+
+.facturas-scroll .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.facturas-scroll .scroll-bar .increment-button,
+.facturas-scroll .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-pref-height: 0;
+}
+
+/* ── FlowPane ── */
+.facturas-flow {
+    -fx-background-color: #080d1a;
+}
+
+/* ═══════════════════════════════════════════════
+   CARDS
+   ═══════════════════════════════════════════════ */
+
+.factura-card {
+    -fx-background-color: #0f172a;
+    -fx-border-color: #1e293b;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-pref-width: 200;
+}
+
+.factura-card:hover {
+    -fx-border-color: #2d5aa0;
+    -fx-background-color: #111d35;
+}
+
+.factura-card-active {
+    -fx-border-color: #3b82f6;
+    -fx-background-color: #0d1f3c;
+}
+
+/* Header de la card */
+.card-header {
+    -fx-padding: 12 14 8 14;
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 0;
+}
+
+.card-num {
+    -fx-text-fill: #3b82f6;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 0.5;
+}
+
+.card-fecha {
+    -fx-text-fill: #334155;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 10px;
+}
+
+/* Body de la card */
+.card-body {
+    -fx-padding: 0 14 10 14;
+    -fx-border-color: transparent transparent #0f1a2e transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-spacing: 4;
+}
+
+.card-cliente {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.card-total-label {
+    -fx-text-fill: #475569;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 10px;
+    -fx-letter-spacing: 0.5;
+    -fx-padding: 4 0 0 0;
+}
+
+.card-total-value {
+    -fx-text-fill: #f1f5f9;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+/* Footer con botón */
+.card-footer {
+    -fx-padding: 10 14;
+}
+
+.card-btn-detalle {
+    -fx-background-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 7 0;
+    -fx-border-color: #1e293b;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.card-btn-detalle:hover {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #94a3b8;
+    -fx-border-color: #334155;
+}
+
+/* ═══════════════════════════════════════════════
+   PANEL DETALLE
+   ═══════════════════════════════════════════════ */
+
+.detalle-panel {
+    -fx-background-color: #0a1020;
+    -fx-border-color: transparent transparent transparent #1e293b;
+    -fx-border-width: 0 0 0 1;
+    -fx-min-height: 0;
+}
+
+.detalle-header {
+    -fx-background-color: #0d1424;
+    -fx-padding: 14 16;
+    -fx-border-color: transparent transparent #1e293b transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 0;
+}
+
+.detalle-title {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 0.5;
+}
+
+.detalle-close {
+    -fx-background-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-font-size: 12px;
+    -fx-padding: 4 8;
+    -fx-border-color: #334155;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.detalle-close:hover {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #94a3b8;
+}
+
+.detalle-scroll {
+    -fx-background-color: #0a1020;
+    -fx-background: #0a1020;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.detalle-scroll .viewport {
+    -fx-background-color: #0a1020;
+}
+
+.detalle-body {
+    -fx-padding: 14;
+    -fx-spacing: 12;
+    -fx-background-color: #0a1020;
+}
+
+/* Meta info */
+.detalle-meta {
+    -fx-background-color: #080d1a;
+    -fx-border-color: #1e293b;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 12;
+    -fx-spacing: 6;
+}
+
+.detalle-meta-value {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.detalle-meta-secondary {
+    -fx-text-fill: #475569;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 11px;
+}
+
+/* Section labels */
+.detalle-section-label {
+    -fx-text-fill: #475569;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 0.8;
+}
+
+/* Tabla de items */
+.detalle-tabla {
+    -fx-background-color: #080d1a;
+    -fx-border-color: #1e293b;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.detalle-tabla .column-header-background {
+    -fx-background-color: #0d1424;
+    -fx-border-color: transparent transparent #1e293b transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-radius: 8 8 0 0;
+}
+
+.detalle-tabla .column-header .label {
+    -fx-text-fill: #3b82f6;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 0.8;
+}
+
+.detalle-tabla .table-row-cell {
+    -fx-background-color: #080d1a;
+    -fx-border-color: transparent transparent #0f1a2e transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-cell-size: 36px;
+}
+
+.detalle-tabla .table-row-cell:odd {
+    -fx-background-color: #0a1020;
+}
+
+.detalle-tabla .table-cell {
+    -fx-text-fill: #94a3b8;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 12px;
+    -fx-padding: 0 10;
+}
+
+.detalle-tabla .filler {
+    -fx-background-color: #0d1424;
+}
+
+/* Totales */
+.detalle-totales {
+    -fx-background-color: #080d1a;
+    -fx-border-color: #1e293b;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 12;
+    -fx-spacing: 6;
+}
+
+.total-row {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 0;
+}
+
+.total-label {
+    -fx-text-fill: #475569;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 11px;
+}
+
+.total-value {
+    -fx-text-fill: #94a3b8;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 11px;
+}
+
+.total-row-main {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 0;
+    -fx-padding: 6 0 0 0;
+}
+
+.total-label-main {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 0.5;
+}
+
+.total-value-main {
+    -fx-text-fill: #3b82f6;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.totales-sep {
+    -fx-background-color: #1e293b;
+    -fx-pref-height: 1;
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+}

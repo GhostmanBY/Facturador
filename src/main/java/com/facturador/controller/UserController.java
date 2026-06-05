@@ -1,5 +1,7 @@
 package com.facturador.controller;
 
+import java.util.List;
+
 import com.facturador.model.User;
 import com.facturador.service.UserServices;
 
@@ -28,12 +30,37 @@ public class UserController {
         }
     }
 
-    public User getUser(int offset, int limit) {
+    public User getUserById(int id) {
         try {
-            return this.userServices.getUser(offset, limit);
+            return this.userServices.getUserById(id);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return null;
+        }
+    }
+
+    public List<User> getUser() {
+        try {
+            return this.userServices.getUser();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public void desactivarUser(User user) {
+        try {
+            this.userServices.desactivarUser(user);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void activarUser(User user) {
+        try {
+            this.userServices.activarUser(user);
+        }  catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 }

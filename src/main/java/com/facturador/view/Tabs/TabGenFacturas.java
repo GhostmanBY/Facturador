@@ -37,7 +37,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-public class TabFacturas {
+public class TabGenFacturas {
     private StockController stockController;
     private TableView<Producto> tablaProductos;
     private ObservableList<Producto> datos;
@@ -51,7 +51,7 @@ public class TabFacturas {
     private ActualizarProductos aProductos;
     
 
-    public TabFacturas(User user) {
+    public TabGenFacturas(User user) {
         this.stockController = new StockController();
         this.user = user;
         this.aProductos = new ActualizarProductos();

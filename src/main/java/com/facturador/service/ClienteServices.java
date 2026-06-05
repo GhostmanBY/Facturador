@@ -3,6 +3,7 @@ package com.facturador.service;
 import java.util.List;
 
 import com.facturador.model.Cliente;
+import com.facturador.model.User;
 import com.facturador.repository.ClienteRepository;
 
 public class ClienteServices {

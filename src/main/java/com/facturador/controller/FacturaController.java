@@ -26,9 +26,9 @@ public class FacturaController {
         }
     }
 
-    public List<Factura> getFactura(int offset, int limit) {
+    public List<Factura> getFactura() {
         try {
-            return this.facturaServices.getFactura(offset, limit) != null ? this.facturaServices.getFactura(offset, limit) : Collections.emptyList();
+            return this.facturaServices.getFactura() != null ? this.facturaServices.getFactura() : Collections.emptyList();
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();

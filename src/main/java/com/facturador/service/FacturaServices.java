@@ -21,9 +21,9 @@ public class FacturaServices {
         }
     }
 
-    public List<Factura> getFactura(int offset, int limit) {
+    public List<Factura> getFactura() {
         try {
-            return this.facturaRepository.getFactura(offset, limit);
+            return this.facturaRepository.getFactura();
         } catch (Exception e){
             System.err.print(e.getMessage());
             return null;
