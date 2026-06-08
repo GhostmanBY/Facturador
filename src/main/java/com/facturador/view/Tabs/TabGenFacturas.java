@@ -72,13 +72,7 @@ public class TabGenFacturas {
         tablaProductos.getColumns().add(colStock);
         tablaProductos.getColumns().add(colPrice);
 
-        List<Producto> listado = this.stockController.getStock()
-        .stream()
-        .filter(producto -> producto.getIsActive())
-        .toList();
-
-        datos = FXCollections.observableArrayList(listado);
-        tablaProductos.setItems(datos);
+        recargarProductos();
         VBox.setVgrow(tablaProductos, Priority.ALWAYS);
 
 
@@ -121,8 +115,7 @@ public class TabGenFacturas {
                 Optional<ButtonType> resultado = confirmacion.showAndWait();
                 
                 if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-                    Producto producto =
-                        stockController.getStockById(seleccionado.getProductoid());
+                    Producto producto = stockController.getStockById(seleccionado.getProductoid());
     
                     this.aProductos.actualizarProductos(
                         producto,
@@ -299,5 +292,15 @@ public class TabGenFacturas {
         lblTotalValor.setText(
             String.format("$ %.2f", resumen.total())
         );
+    }
+
+    public void recargarProductos() {
+        List<Producto> listado = this.stockController.getStock()
+        .stream()
+        .filter(producto -> producto.getIsActive())
+        .toList();
+
+        datos = FXCollections.observableArrayList(listado);
+        tablaProductos.setItems(datos);
     }
 }

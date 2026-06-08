@@ -58,7 +58,13 @@ public class MainView {
         Tab tabgenfacturas = new Tab("Crear Facturas");
         tabgenfacturas.setClosable(false);
         tabgenfacturas.setContent(this.tabgenfacturas.buildFacturasTab());
-        
+        tabgenfacturas.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+            if (isSelected) {
+                this.tabgenfacturas.recargarProductos();
+            }
+        });
+
+
         Tab tabviewfacturas = new Tab("Ver Facturas");
         tabviewfacturas.setClosable(false);
         tabviewfacturas.setContent(this.tabviewfacturas.buildViewFacturasTab());

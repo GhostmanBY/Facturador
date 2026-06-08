@@ -74,17 +74,19 @@ public class DialogNuevoProducto {
         dialog.getDialogPane().getButtonTypes().addAll(btnGuardar, btnCancelar);
         dialog.getDialogPane().setContent(form);
 
-        // Sin Platform.runLater, directo acá
         Button botonGuardar = (Button) dialog.getDialogPane().lookupButton(btnGuardar);
         botonGuardar.getStyleClass().add("button");
-        botonGuardar.setDisable(true);
+        
+        if (this.productoExistente == null){
+            botonGuardar.setDisable(true);
 
-        txtNombre.textProperty().addListener((obs, old, val) ->
-            botonGuardar.setDisable(val.isBlank() || txtPrecio.getText().isBlank())
-        );
-        txtPrecio.textProperty().addListener((obs, old, val) ->
-            botonGuardar.setDisable(val.isBlank() || txtNombre.getText().isBlank())
-        );
+            txtNombre.textProperty().addListener((obs, old, val) ->
+                botonGuardar.setDisable(val.isBlank() || txtPrecio.getText().isBlank())
+            );
+            txtPrecio.textProperty().addListener((obs, old, val) ->
+                botonGuardar.setDisable(val.isBlank() || txtNombre.getText().isBlank())
+            );
+        }
 
         Button botonCancelar = (Button) dialog.getDialogPane().lookupButton(btnCancelar);
         botonCancelar.getStyleClass().add("button-danger");

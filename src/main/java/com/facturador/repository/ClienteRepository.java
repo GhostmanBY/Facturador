@@ -22,6 +22,7 @@ public class ClienteRepository {
         .id(resultado.getInt("id"))
         .nombre(resultado.getString("nombre"))
         .direccion(resultado.getString("domicilio"))
+        .documento(resultado.getString("documento"))
         .telefono(resultado.getString("telefono"))
         .email(resultado.getString("email"))
         .isActive(resultado.getBoolean("is_active"))
