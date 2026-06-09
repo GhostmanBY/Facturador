@@ -34,7 +34,7 @@ public class UserRepository {
     }
 
     public void createUser(User user) {
-        String sql = "insert into users (name, email, hash_pass, documento, domicilio, telefono) values (?, ?, ?, ?, ?, ?)";
+        String sql = "insert into users (name, email, password, documento, domicilio, telefono) values (?, ?, ?, ?, ?, ?)";
         
         try (
             Connection conn = this.db.connect(); 

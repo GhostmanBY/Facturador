@@ -7,8 +7,11 @@ import com.facturador.controller.FacturaController;
 import com.facturador.controller.UserController;
 import com.facturador.model.Cliente;
 import com.facturador.model.User;
+import com.facturador.model.User.UserRole;
 import com.facturador.view.Dialog.DialogNuevoCliente;
 import com.facturador.view.Dialog.DialogNuevoUsuario;
+import com.facturador.view.Helpers.ErrorAlert;
+import com.facturador.service.AuthServices;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,10 +30,11 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class TabAdministracion {
-
     private UserController userController;
     private ClienteController clienteController;
     private FacturaController facturaController;
+    private ErrorAlert alert = new ErrorAlert();
+    private AuthServices authServices = AuthServices.getInstance();
 
     public TabAdministracion() {
         this.userController = new UserController();
@@ -156,11 +160,23 @@ public class TabAdministracion {
                 });
 
                 btnToggle.setOnAction(e -> {
-                    User user = getTableView().getItems().get(getIndex());
-                    if (user.isActive()) {
-                        userController.desactivarUser(user);
+                    User seleccionado = getTableView().getItems().get(getIndex());
+                    User actual = authServices.getUserActual();
+
+                    if (actual.getRole() == UserRole.GERENTE) {
+                        if (seleccionado.getRole() == UserRole.ADMIN) {
+                            alert.mostrarError("No puede deshabilitar administradores");
+                            return;
+                        }
+                        if (seleccionado.getRole() == UserRole.GERENTE) {
+                            alert.mostrarError("No puede deshabilitar usuarios con su mismo rol");
+                            return;
+                        }
+                    }
+                    if (seleccionado.isActive()) {
+                        userController.desactivarUser(seleccionado);
                     } else {
-                        userController.activarUser(user);
+                        userController.activarUser(seleccionado);
                     }
                     tabla.getItems().setAll(userController.getUser());
                 });

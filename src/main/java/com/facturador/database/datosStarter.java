@@ -16,10 +16,11 @@ public class datosStarter {
     private void insertDefaultUsers() {
         String sql = """
             INSERT INTO users (name, email, password, telefono, domicilio, documento, is_active, role) VALUES
-            ('Pardo', 'pardo@facturador.com', 'PoE0800', '2235123456', 'Av. Colón 1234', '30123456', true, 'ADMIN'),
-            ('Marcos', 'marcos@facturador.com', 'Bruno2025', '2235234567', 'San Martín 2456', '28987654', true, 'ADMIN'),
-            ('Santiago', 'santiago@facturador.com', 'Mono', '2235345678', 'Luro 3578', '32765432', true, 'ADMIN'),
-            ('Nico', 'nico@facturador.com', 'admin', '2235456789', 'Independencia 456', '34567890', true, 'ADMIN'),
+            ('Nahuel', 'nahuel@facturador.com', 'PoE0800', '2235457919', 'Jose Ingenieros 921', '47563604', true, 'ADMIN'),
+            ('Pardo', 'pardo@facturador.com', 'PoE0800', '2235123456', 'Av. Colón 1234', '30123456', true, 'GERENTE'),
+            ('Marcos', 'marcos@facturador.com', 'Bruno2025', '2235234567', 'San Martín 2456', '28987654', true, 'GERENTE'),
+            ('Santiago', 'santiago@facturador.com', 'Mono', '2235345678', 'Luro 3578', '32765432', true, 'GERENTE'),
+            ('Nico', 'nico@facturador.com', 'admin', '2235456789', 'Independencia 456', '34567890', true, 'GERENTE'),
             ('Laura', 'laura@facturador.com', 'laura1234', '2235567890', 'Rivadavia 789', '31234567', true, 'CAJERO'),
             ('Tomás', 'tomas@facturador.com', 'tomas1234', '2235678901', 'Belgrano 1023', '29876543', true, 'CAJERO'),
             ('Valentina', 'valentina@facturador.com', 'vale1234', '2235789012', 'Mitre 456', '33456789', true, 'CAJERO'),

@@ -80,16 +80,16 @@ public class MainView {
 
         TabPane tabPane = new TabPane();
 
-        if (user.getRole() == UserRole.REPOSITOR || user.getRole() == UserRole.ADMIN) {
+        if (user.getRole() == UserRole.REPOSITOR || user.getRole() == UserRole.ADMIN || user.getRole() == UserRole.GERENTE) {
             tabPane.getTabs().add(tabProductos);
         }
         
-        if (user.getRole() == UserRole.CAJERO || user.getRole() == UserRole.ADMIN) {
+        if (user.getRole() == UserRole.CAJERO || user.getRole() == UserRole.ADMIN || user.getRole() == UserRole.GERENTE) {
             tabPane.getTabs().add(tabgenfacturas);
             tabPane.getTabs().add(tabviewfacturas);
         }
         
-        if (user.getRole() == UserRole.ADMIN) {
+        if (user.getRole() == UserRole.ADMIN || user.getRole() == UserRole.GERENTE) {
             tabPane.getTabs().add(tabadministrador);
         }
         

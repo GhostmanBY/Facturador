@@ -80,7 +80,7 @@ public class createDB {
                 domicilio VARCHAR(255) NOT NULL,
                 documento VARCHAR(50) NOT NULL UNIQUE,
                 is_active BOOLEAN NOT NULL,
-                role ENUM('ADMIN', 'CAJERO', 'REPOSITOR') NOT NULL
+                role ENUM('ADMIN', 'GERENTE', 'CAJERO', 'REPOSITOR') NOT NULL
             )
         """;
 

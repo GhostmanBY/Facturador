@@ -4,6 +4,7 @@ package com.facturador.model;
 public class User {
     public enum UserRole {
         ADMIN,
+        GERENTE,
         CAJERO,
         REPOSITOR
     }

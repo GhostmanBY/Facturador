@@ -6,12 +6,17 @@ import com.facturador.model.User;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class AuthServices {
+    private static final AuthServices INSTANCE = new AuthServices();
     private AuthRepository authrepository;
 
     public AuthServices() {
         this.authrepository = new AuthRepository();
     }
     
+    public static AuthServices getInstance() {
+        return INSTANCE;
+    }
+
     public void createHashPassword(User user, String password) {
         try {
             String hash = BCrypt.hashpw(password, BCrypt.gensalt());

@@ -140,11 +140,11 @@ public class DialogNuevoUsuario {
                 errorAlert.mostrarError("El documento no puede estar vacío");
                 return;
             }
-            if (contrasena.isBlank()) {
+            if (contrasena.isBlank() && this.usuarioExistente != null) {
                 errorAlert.mostrarError("La contraseña no puede estar vacía");
                 return;
             }
-            if (!contrasena.equals(contrasenaConfirm)) {
+            if (!contrasena.equals(contrasenaConfirm) && this.usuarioExistente != null) {
                 errorAlert.mostrarError("Las contraseñas no coinciden");
                 return;
             }
