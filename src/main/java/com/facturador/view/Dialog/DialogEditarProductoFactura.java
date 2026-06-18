@@ -7,7 +7,9 @@ import com.facturador.model.DProFactura;
 import com.facturador.model.ProductFactura;
 import com.facturador.model.Producto;
 import com.facturador.utils.Utils;
+
 import com.facturador.view.Helpers.ActualizarProductos;
+import com.facturador.view.Helpers.ErrorAlert;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableRow;
@@ -19,6 +21,7 @@ public class DialogEditarProductoFactura {
     private ActualizarProductos aProductos;
     private Utils utils;
     private TableView<Producto> tablaProductos;
+    private ErrorAlert alert;
 
     private Runnable onFacturaActualizada;
     
@@ -29,6 +32,7 @@ public class DialogEditarProductoFactura {
         this.dialoghelp = new DialogHelperFactura();
         this.aProductos = new ActualizarProductos();
         this.utils = new Utils();
+        this.alert = new ErrorAlert();
     }
 
 
@@ -38,6 +42,11 @@ public class DialogEditarProductoFactura {
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
                     ProductFactura item = row.getItem();
+                    Producto producto_now = this.tablaProductos.getItems()
+                    .stream()
+                    .filter(producto -> producto.getId() == item.getId())
+                    .findFirst()
+                    .orElse(null);
                     Optional<DProFactura> dialog = this.dialoghelp.mostrarDialogoProducto(
                         "Editar: " + item.getName(),
                         item.getCantidad(),
@@ -48,10 +57,23 @@ public class DialogEditarProductoFactura {
                         return;
                     }
 
-                    int cantidad = dialog.get().cantidad();
-                    double descuento = dialog.get().descuento();
+                    try {
+                        int cantidad = dialog.get().cantidad();
+                        double descuento = dialog.get().descuento();
+                        if (cantidad <= 0) {
+                            this.alert.mostrarError("La cantidad debe ser mayor a cero");
+                            return;
+                        }
+                        if (cantidad > producto_now.getStock()) {
+                            this.alert.mostrarError("Stock insuficiente");
+                            return;
+                        }
+                        if (descuento < 0 || descuento > 100) {
+                            this.alert.mostrarError("El descuento debe estar entre 0 y 100");
+                            return;
+                        }
 
-                    ProductFactura actualizado = item.toBuilder()
+                        ProductFactura actualizado = item.toBuilder()
                         .cantidad(cantidad)
                         .descuento(descuento)
                         .subtotal(
@@ -63,18 +85,21 @@ public class DialogEditarProductoFactura {
                         )
                         .build();
 
-                    int index = itemsFactura.indexOf(item);
-                    itemsFactura.set(index, actualizado);
+                        int index = itemsFactura.indexOf(item);
+                        itemsFactura.set(index, actualizado);
 
-                    if (onFacturaActualizada != null) {
-                        onFacturaActualizada.run();
+                        if (onFacturaActualizada != null) {
+                            onFacturaActualizada.run();
+                        }
+                        tablaFactura.refresh();
+                        this.aProductos.actualizarProductos(
+                            this.stockController.getStockById(item.getProductoid()),
+                            cantidad - item.getCantidad(),
+                            this.tablaProductos
+                        );
+                    } catch (NumberFormatException ex) {
+                        this.alert.mostrarError("Ingrese números válidos");
                     }
-                    tablaFactura.refresh();
-                    this.aProductos.actualizarProductos(
-                        this.stockController.getStockById(item.getProductoid()),
-                        cantidad - item.getCantidad(),
-                        this.tablaProductos
-                    );
                 }
             });
             return row;

@@ -21,7 +21,7 @@ public class createDB {
     }
     
     public boolean databaseExists(){
-        String sql = "SHOW DATABASES LIKE 'facturador'";
+        String sql = "SHOW DATABASES LIKE " + dotenv.get("DB_NAME");
 
         try (
             Connection conn = db.connectSinBase();

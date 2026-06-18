@@ -58,6 +58,7 @@ public class DialogGenerarFactura {
         this.facturaController = new FacturaController();
         this.productFController = new ProductFController();
         this.utils = new Utils();
+        this.alert = new ErrorAlert();
         this.lblTotalValor = lblTotalValor;
         this.lblSubValor = lblSubValor;
         this.lblDescuentoValor = lblDescuentoValor;
@@ -69,6 +70,11 @@ public class DialogGenerarFactura {
 
     public void configurarGenerarFactura(Button btnGenerar, ObservableList<ProductFactura> itemsFactura) {
         btnGenerar.setOnAction(e -> {
+            if (itemsFactura.isEmpty()) {
+                this.alert.mostrarError("No se han agregado productos para generar una factura");
+                return;
+            }
+
             Dialog<Void> dialog = new Dialog<>();
             dialog.setTitle("Generar Factura");
 
@@ -86,10 +92,10 @@ public class DialogGenerarFactura {
             cbClientes.setPromptText("Seleccionar Cliente");
             cbClientes.getItems().setAll(
                 this.clienteController.getClientes()
-                    .stream()
-                    .filter(c -> c.isActive())
-                    .map(c -> c.getNombre() + " (ID: " + c.getId() + ")")
-                    .toList()
+                .stream()
+                .filter(c -> c.isActive())
+                .map(c -> c.getNombre() + " (ID: " + c.getId() + ")")
+                .toList()
             );
             cbClientes.getStyleClass().add("dialog-combo");
             cbClientes.setMaxWidth(Double.MAX_VALUE);
@@ -266,7 +272,7 @@ public class DialogGenerarFactura {
             
             btnAceptarReal.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
                 if (cbClientes.getSelectionModel().isEmpty()) {
-                    alert.mostrarError("Seleccione un cliente");
+                    this.alert.mostrarError("Seleccione un cliente");
                     event.consume();
                     return;
                 }

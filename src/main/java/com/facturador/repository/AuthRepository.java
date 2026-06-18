@@ -1,4 +1,4 @@
-package com.facturador.model;
+package com.facturador.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.facturador.database.database;
+import com.facturador.model.User;
 
 public class AuthRepository {
     private database db;

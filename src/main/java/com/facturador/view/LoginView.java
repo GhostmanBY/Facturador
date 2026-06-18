@@ -50,6 +50,7 @@ public class LoginView {
         errorLabel.getStyleClass().add("error-label");
         errorLabel.setVisible(false);
 
+        btnLogin.setDefaultButton(true);
         btnLogin.setOnAction(e -> {
 
             boolean loginOk = authController.Login(

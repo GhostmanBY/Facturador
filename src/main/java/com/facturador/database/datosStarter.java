@@ -16,6 +16,7 @@ public class datosStarter {
     private void insertDefaultUsers() {
         String sql = """
             INSERT INTO users (name, email, password, telefono, domicilio, documento, is_active, role) VALUES
+            ('admin', 'admin', 'admin1234', '2235457919', 'Jose Ingenieros 921', '47563604', true, 'ADMIN'),
             ('Nahuel', 'nahuel@facturador.com', 'PoE0800', '2235457919', 'Jose Ingenieros 921', '47563604', true, 'ADMIN'),
             ('Pardo', 'pardo@facturador.com', 'PoE0800', '2235123456', 'Av. Colón 1234', '30123456', true, 'GERENTE'),
             ('Marcos', 'marcos@facturador.com', 'Bruno2025', '2235234567', 'San Martín 2456', '28987654', true, 'GERENTE'),
