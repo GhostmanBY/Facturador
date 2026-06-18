@@ -2,6 +2,7 @@ package com.facturador.view.Dialog;
 
 import java.util.Optional;
 import com.facturador.model.Producto;
+import com.facturador.view.Helpers.ErrorAlert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -12,13 +13,16 @@ import javafx.scene.layout.VBox;
 
 public class DialogNuevoProducto {
     private final Producto productoExistente;
+    private ErrorAlert alert;
 
     public DialogNuevoProducto() {
         this.productoExistente = null;
+        this.alert = new ErrorAlert();
     }
 
     public DialogNuevoProducto(Producto producto) {
         this.productoExistente = producto;
+        this.alert = new ErrorAlert();
     }
 
     public Optional<Producto> abrirDialog() {
@@ -91,25 +95,39 @@ public class DialogNuevoProducto {
         Button botonCancelar = (Button) dialog.getDialogPane().lookupButton(btnCancelar);
         botonCancelar.getStyleClass().add("button-danger");
 
+        botonGuardar.addEventFilter(javafx.event.ActionEvent.ACTION, even -> {
+            try {
+                int stock = Integer.parseInt(txtStock.getText().trim());
+                double precio = Double.parseDouble(txtPrecio.getText().trim().replace(",", "."));
+                if (stock <= 0) {
+                    this.alert.mostrarError("La cantidad debe ser mayor a cero");
+                    even.consume();
+                    return;
+                }
+                if (precio < 0) {
+                    this.alert.mostrarError("EL precio no puede ser negativo");
+                    even.consume();
+                    return;
+                }
+            } catch (NumberFormatException ex) {
+                lblError.setText("Precio y stock deben ser números");
+                even.consume();
+            }
+        });
+
         dialog.setResultConverter(buttonType -> {
             if (buttonType == btnGuardar) {
-                try {
-                    Producto.Builder builder = Producto.builder()
-                        .name(txtNombre.getText().trim())
-                        .description(txtDescripcion.getText().trim())
-                        .price(Double.parseDouble(txtPrecio.getText().trim().replace(",", ".")))
-                        .stock(Integer.parseInt(txtStock.getText().trim()));
+                Producto.Builder builder = Producto.builder()
+                    .name(txtNombre.getText().trim())
+                    .description(txtDescripcion.getText().trim())
+                    .price(Double.parseDouble(txtPrecio.getText().trim().replace(",", ".")))
+                    .stock(Integer.parseInt(txtStock.getText().trim()));
 
-                    if (esEdicion) {
-                        builder.id(productoExistente.getId())
-                        .code(productoExistente.getCode());
-                    }
-
-                    return builder.build();
-                } catch (NumberFormatException ex) {
-                    lblError.setText("Precio y stock deben ser números");
-                    return null;
+                if (esEdicion) {
+                    builder.id(productoExistente.getId())
+                    .code(productoExistente.getCode());
                 }
+                return builder.build();
             }
             return null;
         });
