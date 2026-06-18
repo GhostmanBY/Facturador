@@ -34,7 +34,7 @@ public class UserRepository {
     }
 
     public void createUser(User user) {
-        String sql = "insert into users (name, email, password, documento, domicilio, telefono) values (?, ?, ?, ?, ?, ?)";
+        String sql = "insert into users (name, email, password, documento, domicilio, telefono, role) values (?, ?, ?, ?, ?, ?, ?)";
         
         try (
             Connection conn = this.db.connect(); 
@@ -46,6 +46,7 @@ public class UserRepository {
             stmt.setString(4, user.getDocumento());
             stmt.setString(5, user.getDomicilio());
             stmt.setString(6, user.getTelefono());
+            stmt.setString(7, user.getRole().toString());
 
             stmt.executeUpdate();
 
@@ -55,7 +56,7 @@ public class UserRepository {
     }
     
     public void modifyUser(User user) {
-        String sql = "UPDATE users SET name = ?, domicilio = ?, telefono = ? WHERE id = ?";
+        String sql = "UPDATE users SET name = IFNULL(?, name), domicilio = IFNULL(?, domicilio), telefono = IFNULL(?, telefono), password = IFNULL(?, password) WHERE id = ?";
 
         try (
             Connection conn = this.db.connect();
@@ -64,7 +65,8 @@ public class UserRepository {
             stmt.setString(1, user.getName());
             stmt.setString(2, user.getDomicilio());
             stmt.setString(3, user.getTelefono());
-            stmt.setInt(4, user.getId());
+            stmt.setString(4, user.getHashPassword());
+            stmt.setInt(5, user.getId());
             
             stmt.executeUpdate();
 

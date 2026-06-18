@@ -4,7 +4,6 @@ public class Producto {
     private int id;
     private String name;
     private String description;
-    private String code;
     private double price;
     private int stock;
     private boolean is_active;
@@ -13,7 +12,6 @@ public class Producto {
         private int id;
         private String name;
         private String description;
-        private String code;
         private double price;
         private int stock;
         private boolean is_active;
@@ -29,11 +27,6 @@ public class Producto {
 
         public Builder description(String description) {
             this.description = description;
-            return this;
-        }
-
-        public Builder code(String code) {
-            this.code = code;
             return this;
         }
 
@@ -61,7 +54,6 @@ public class Producto {
         this.id = builder.id;
         this.name = builder.name;
         this.description = builder.description;
-        this.code = builder.code;
         this.price = builder.price;
         this.stock = builder.stock;
         this.is_active = builder.is_active;
@@ -72,7 +64,6 @@ public class Producto {
         .id(this.id)
         .name(this.name)
         .description(this.description)
-        .code(this.code)
         .price(this.price)
         .stock(this.stock)
         .isActive(this.is_active);
@@ -83,7 +74,6 @@ public class Producto {
     public int getId() {return this.id; }
     public String getName() {return this.name; }
     public String getDescription() {return this.description; }
-    public String getCode() {return this.code; }
     public double getPrice() {return this.price; }
     public int getStock() {return this.stock; }
     public boolean getIsActive() {return this.is_active; }

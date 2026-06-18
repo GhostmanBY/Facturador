@@ -1,5 +1,6 @@
 package com.facturador.view.Tabs;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.facturador.controller.ClienteController;
@@ -30,6 +31,11 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class TabAdministracion {
+    private Label totalFacturasLabel;
+    private Label totalUsuariosLabel;
+    private Label totalClientesLabel;
+    private TableView<User> tabla_user;
+    TableView<Cliente> tabla_cliente;
     private UserController userController;
     private ClienteController clienteController;
     private FacturaController facturaController;
@@ -53,13 +59,17 @@ public class TabAdministracion {
         int totalUsuarios = userController.getUser().size();
         int totalClientes = clienteController.getClientes().size();
 
+        totalFacturasLabel = new Label(String.valueOf(totalFacturas));
+        totalUsuariosLabel = new Label(String.valueOf(totalUsuarios));
+        totalClientesLabel = new Label(String.valueOf(totalClientes));
+
         HBox statsRow = new HBox(12);
         statsRow.getStyleClass().add("admin-stats-row");
 
         statsRow.getChildren().addAll(
-            buildStatBox("TOTAL FACTURAS",  String.valueOf(totalFacturas),  "admin-stat-value"),
-            buildStatBox("TOTAL USUARIOS",  String.valueOf(totalUsuarios),  "admin-stat-value-blue"),
-            buildStatBox("TOTAL CLIENTES",  String.valueOf(totalClientes),  "admin-stat-value-amber")
+            buildStatBox("TOTAL FACTURAS",  totalFacturasLabel,  "admin-stat-value"),
+            buildStatBox("TOTAL USUARIOS",  totalUsuariosLabel,  "admin-stat-value-blue"),
+            buildStatBox("TOTAL CLIENTES",  totalClientesLabel,  "admin-stat-value-amber")
         );
 
         // ── Tablas ────────────────────────────────────────────────────
@@ -76,16 +86,13 @@ public class TabAdministracion {
         return root;
     }
 
-    private VBox buildStatBox(String etiqueta, String valor, String estiloValor) {
+    private VBox buildStatBox(String etiqueta, Label labelValor, String estiloValor) {
         VBox contenedor = new VBox(4);
         contenedor.getStyleClass().add("admin-stat");
         HBox.setHgrow(contenedor, Priority.ALWAYS);
 
         Label labelEtiqueta = new Label(etiqueta);
         labelEtiqueta.getStyleClass().add("admin-stat-label");
-
-        Label labelValor = new Label(valor);
-        labelValor.getStyleClass().add(estiloValor);
 
         contenedor.getChildren().addAll(labelEtiqueta, labelValor);
         return contenedor;
@@ -109,10 +116,10 @@ public class TabAdministracion {
         });
 
         // Tabla
-        TableView<User> tabla = new TableView<>(usuarios);
-        tabla.getStyleClass().add("admin-table");
-        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-        VBox.setVgrow(tabla, Priority.ALWAYS);
+        tabla_user = new TableView<>(usuarios);
+        tabla_user.getStyleClass().add("admin-table");
+        tabla_user.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+        VBox.setVgrow(tabla_user, Priority.ALWAYS);
 
         TableColumn<User, String> colNombre = new TableColumn<>("Nombre");
         colNombre.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -142,7 +149,7 @@ public class TabAdministracion {
             private final Button btnEditar = new Button("Editar");
             private final Button btnToggle = new Button();
             private final HBox box = new HBox(6, btnEditar, btnToggle);
-
+            
             {
                 btnEditar.getStyleClass().add("table-btn-edit");
                 btnToggle.getStyleClass().add("table-btn-toggle");
@@ -155,7 +162,7 @@ public class TabAdministracion {
                     usuarioEditado.ifPresent(usuario -> {
                         userController.modifyUser(usuario);
 
-                        tabla.getItems().setAll(userController.getUser());
+                        tabla_user.getItems().setAll(userController.getUser());
                     });
                 });
 
@@ -178,7 +185,7 @@ public class TabAdministracion {
                     } else {
                         userController.activarUser(seleccionado);
                     }
-                    tabla.getItems().setAll(userController.getUser());
+                    tabla_user.getItems().setAll(userController.getUser());
                 });
             }
 
@@ -187,6 +194,23 @@ public class TabAdministracion {
                 super.updateItem(item, empty);
                 if (empty) { setGraphic(null); return; }
                 User user = getTableView().getItems().get(getIndex());
+                User actual = authServices.getUserActual();
+                boolean puedeEditar = true;
+
+                if (user.getRole() == UserRole.ADMIN &&
+                    actual.getRole() == UserRole.ADMIN) {
+                    puedeEditar = false;
+                }
+                if (user.getRole() == UserRole.ADMIN &&
+                    actual.getRole() == UserRole.GERENTE) {
+                    puedeEditar = false;
+                }
+                if (user.getRole() == UserRole.GERENTE &&
+                    actual.getRole() == UserRole.GERENTE) {
+                    puedeEditar = false;
+                }
+                btnEditar.setDisable(!puedeEditar);
+
                 btnToggle.setText(user.isActive() ? "Desactivar" : "Activar");
                 btnToggle.getStyleClass().removeAll("table-btn-deactivate", "table-btn-activate");
                 btnToggle.getStyleClass().add(user.isActive() ? "table-btn-deactivate" : "table-btn-activate");
@@ -194,12 +218,12 @@ public class TabAdministracion {
             }
         });
 
-        tabla.getColumns().add(colNombre);
-        tabla.getColumns().add(colRol);
-        tabla.getColumns().add(colEstado);
-        tabla.getColumns().add(colAcciones);
+        tabla_user.getColumns().add(colNombre);
+        tabla_user.getColumns().add(colRol);
+        tabla_user.getColumns().add(colEstado);
+        tabla_user.getColumns().add(colAcciones);
         panel.getChildren().add(header);
-        panel.getChildren().add(tabla);
+        panel.getChildren().add(tabla_user);
         return panel;
     }
 
@@ -219,10 +243,10 @@ public class TabAdministracion {
             });
         });
 
-        TableView<Cliente> tabla = new TableView<>(clientes);
-        tabla.getStyleClass().add("admin-table");
-        tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-        VBox.setVgrow(tabla, Priority.ALWAYS);
+        tabla_cliente = new TableView<>(clientes);
+        tabla_cliente.getStyleClass().add("admin-table");
+        tabla_cliente.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+        VBox.setVgrow(tabla_cliente, Priority.ALWAYS);
 
         TableColumn<Cliente, String> colNombre = new TableColumn<>("Nombre");
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -269,7 +293,7 @@ public class TabAdministracion {
                     clienteEditado.ifPresent(cliente -> {
                         clienteController.updateCliente(cliente);
 
-                        tabla.getItems().setAll(clienteController.getClientes());
+                        tabla_cliente.getItems().setAll(clienteController.getClientes());
                     });
                 });
 
@@ -280,7 +304,7 @@ public class TabAdministracion {
                     } else {
                         clienteController.activarCliente(cliente);
                     }
-                    tabla.getItems().setAll(clienteController.getClientes());
+                    tabla_cliente.getItems().setAll(clienteController.getClientes());
                 });
             }
 
@@ -296,13 +320,13 @@ public class TabAdministracion {
             }
         });
 
-        tabla.getColumns().add(colNombre);
-        tabla.getColumns().add(colDocumento);
-        tabla.getColumns().add(colTelefono);
-        tabla.getColumns().add(colEstado);
-        tabla.getColumns().add(colAcciones);
+        tabla_cliente.getColumns().add(colNombre);
+        tabla_cliente.getColumns().add(colDocumento);
+        tabla_cliente.getColumns().add(colTelefono);
+        tabla_cliente.getColumns().add(colEstado);
+        tabla_cliente.getColumns().add(colAcciones);
         panel.getChildren().add(header);
-        panel.getChildren().add(tabla);
+        panel.getChildren().add(tabla_cliente);
         return panel;
     }
 
@@ -324,5 +348,21 @@ public class TabAdministracion {
 
         header.getChildren().addAll(lblTitulo, spacer, btnAgregar);
         return header;
+    }
+
+    public void recargarData() {
+        ObservableList<Cliente> clientes = FXCollections.observableArrayList(this.clienteController.getClientes());
+        tabla_cliente.setItems(clientes);
+
+        ObservableList<User> users = FXCollections.observableArrayList(this.userController.getUser());
+        tabla_user.setItems(users);
+        
+        int totalFacturas = facturaController.getFactura().size();
+        int totalUsuarios = userController.getUser().size();
+        int totalClientes = clienteController.getClientes().size();
+
+        totalFacturasLabel.setText(String.valueOf(totalFacturas));
+        totalUsuariosLabel.setText(String.valueOf(totalUsuarios));
+        totalClientesLabel.setText(String.valueOf(totalClientes));
     }
 }

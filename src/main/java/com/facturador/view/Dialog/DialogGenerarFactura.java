@@ -7,9 +7,11 @@ import com.facturador.utils.Utils;
 import com.facturador.controller.ClienteController;
 import com.facturador.controller.FacturaController;
 import com.facturador.controller.ProductFController;
+import com.facturador.controller.StockController;
 import com.facturador.model.Cliente;
 import com.facturador.model.Factura;
 import com.facturador.model.ProductFactura;
+import com.facturador.model.Producto;
 import com.facturador.model.User;
 import com.facturador.view.Helpers.ErrorAlert;
 
@@ -26,6 +28,7 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -35,11 +38,11 @@ public class DialogGenerarFactura {
     private ClienteController clienteController;
     private FacturaController facturaController;
     private ProductFController productFController;
+    private StockController stockController;
     private ErrorAlert alert;
     private Utils utils;
     private Label lblTotalValor;
     private Label lblSubValor;
-    private Label lblDescuentoValor;
     private Label lblImpuestosValor;
     private User user;
     private int IVA;
@@ -50,18 +53,17 @@ public class DialogGenerarFactura {
             Runnable oRunnable,
             Label lblTotalValor, 
             Label lblSubValor, 
-            Label lblDescuentoValor, 
             Label lblImpuestosValor, 
             User user, 
             int IVA) {
         this.clienteController = new ClienteController();
         this.facturaController = new FacturaController();
         this.productFController = new ProductFController();
+        this.stockController = new StockController();
         this.utils = new Utils();
         this.alert = new ErrorAlert();
         this.lblTotalValor = lblTotalValor;
         this.lblSubValor = lblSubValor;
-        this.lblDescuentoValor = lblDescuentoValor;
         this.lblImpuestosValor = lblImpuestosValor;
         this.user = user;
         this.IVA = IVA;
@@ -237,7 +239,25 @@ public class DialogGenerarFactura {
             grid.add(content_subtotal, 0, 1);
 
             Label lblDescuento = new Label("Descuento: ");
-            TextField TxFdescuento = new TextField(this.lblDescuentoValor.getText());
+            TextField TxFdescuento = new TextField();
+            TxFdescuento.setPromptText("0%");
+            TextFormatter<Integer> formatter = new TextFormatter<>(change -> {
+                String nuevoTexto = change.getControlNewText();
+                if (nuevoTexto.isEmpty()) {
+                    return change;
+                }
+
+                try {
+                    int valor = Integer.parseInt(nuevoTexto);
+                    if (valor >= 0 && valor <= 100) {
+                        return change;
+                    }
+                } catch (NumberFormatException ew) {
+                    // para que no muestre el error de caracter
+                }
+
+                return null;
+            });
 
             VBox content_descuento = new VBox(lblDescuento, TxFdescuento);
             grid.add(content_descuento, 1, 0);
@@ -251,7 +271,7 @@ public class DialogGenerarFactura {
             TxFsubtotal.getStyleClass().add("dialog-field-input");
             TxFsubtotal.setEditable(false);
             TxFdescuento.getStyleClass().add("dialog-field-input");
-            TxFdescuento.setEditable(false);
+            TxFdescuento.setEditable(true);
             TxFimpuestos.getStyleClass().add("dialog-field-input");
             TxFimpuestos.setEditable(false);
 
@@ -270,6 +290,22 @@ public class DialogGenerarFactura {
             dialog.getDialogPane().getButtonTypes().add(btnAceptar);
             Button btnAceptarReal = (Button) dialog.getDialogPane().lookupButton(btnAceptar);
             
+            TxFdescuento.setTextFormatter(formatter);
+                TxFdescuento.textProperty().addListener((obs, oldValue, newValue) -> {
+                    double subtotal = itemsFactura.stream().mapToDouble(ProductFactura::getSubtotal).sum();
+                    try {
+                        double porcentaje = newValue.isBlank() ? 0 : Double.parseDouble(newValue);
+
+                        double descuento = subtotal * porcentaje / 100;
+                        double total = subtotal - descuento;
+
+                        TxFtotal.setText(String.format("$ %.2f", total));
+                    } catch (NumberFormatException ew) {
+                        TxFtotal.setText(String.format("$ %.2f", subtotal));
+                    }
+                }
+            );
+
             btnAceptarReal.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
                 if (cbClientes.getSelectionModel().isEmpty()) {
                     this.alert.mostrarError("Seleccione un cliente");
@@ -281,7 +317,11 @@ public class DialogGenerarFactura {
                 int vendedorId = this.user.getId(); // por ahora fijo
 
                 double subtotal = itemsFactura.stream().mapToDouble(ProductFactura::getSubtotal).sum();
-                double descuento = itemsFactura.stream().mapToDouble(p -> p.getCantidad() * p.getPrecioUnitario() * p.getDescuento() / 100).sum();
+                double porcentaje = 0;
+                if (!TxFdescuento.getText().isBlank()) {
+                    porcentaje = Double.parseDouble(TxFdescuento.getText());
+                }
+                double descuento = subtotal * porcentaje / 100;
                 double impuestos = (subtotal - descuento) * this.IVA / 100;
                 double total = subtotal - descuento + impuestos;
 
@@ -310,6 +350,12 @@ public class DialogGenerarFactura {
             .build()
         );
         for (ProductFactura item : itemsFactura) {
+            Producto producto = this.stockController.getStockById(item.getProductoid());
+            Producto producto_update = producto.toBuilder()
+            .stock(producto.getStock() - item.getCantidad())
+            .build();
+
+            this.stockController.modifyStock(producto_update);
             this.productFController.createDetailFactura(item);
         }
 

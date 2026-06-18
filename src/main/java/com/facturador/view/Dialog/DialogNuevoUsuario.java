@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import com.facturador.model.User;
 import com.facturador.model.User.UserRole;
+import com.facturador.service.AuthServices;
+import com.facturador.utils.Utils;
 import com.facturador.view.Helpers.ErrorAlert;
 
 import javafx.geometry.Pos;
@@ -22,7 +24,10 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class DialogNuevoUsuario {
+    private Utils utils = new Utils();
     private ErrorAlert errorAlert = new ErrorAlert();
+    private AuthServices authServices = AuthServices.getInstance();
+
 
     private final User usuarioExistente;
 
@@ -136,23 +141,30 @@ public class DialogNuevoUsuario {
                 errorAlert.mostrarError("El email no puede estar vacío");
                 return;
             }
+            if (!utils.esEmailValido(email)) {
+                errorAlert.mostrarError("El email no es valido");
+                return;
+            }
             if (documento.isBlank()) {
                 errorAlert.mostrarError("El documento no puede estar vacío");
                 return;
             }
-            if (contrasena.isBlank() && this.usuarioExistente != null) {
-                errorAlert.mostrarError("La contraseña no puede estar vacía");
-                return;
-            }
-            if (!contrasena.equals(contrasenaConfirm) && this.usuarioExistente != null) {
-                errorAlert.mostrarError("Las contraseñas no coinciden");
+            if (!utils.esNumero(documento)) {
+                errorAlert.mostrarError("El documento no puede tener letras");
                 return;
             }
             if (rolSeleccionado == null) {
                 errorAlert.mostrarError("Seleccioná un rol");
                 return;
             }
-
+            if (rolSeleccionado == UserRole.ADMIN && authServices.getUserActual().getRole() != UserRole.ADMIN) {
+                errorAlert.mostrarError("Usted no puede crear un usuario con rol de ADMIN");
+                return;
+            }
+            if (rolSeleccionado == UserRole.GERENTE && authServices.getUserActual().getRole() == UserRole.GERENTE) {
+                errorAlert.mostrarError("Usted no puede crear usuario con su mismo rol (GERENTE)");
+                return;
+            }
             if (contrasena.isBlank() && usuarioExistente == null) {
                 errorAlert.mostrarError("La contraseña no puede estar vacía");
                 return;
@@ -161,6 +173,10 @@ public class DialogNuevoUsuario {
                 errorAlert.mostrarError("Las contraseñas no coinciden");
                 return;
             }
+            if (!utils.esTelefonoValido(telefono)) {
+                errorAlert.mostrarError("El telefono ingresado no es valido");
+                return;
+            } 
 
             resultado[0] = User.builder()
             .id(usuarioExistente != null ? usuarioExistente.getId() : null)

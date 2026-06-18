@@ -44,7 +44,6 @@ public class TabGenFacturas {
     private ObservableList<ProductFactura> itemsFactura;
     private static final int IVA = 21;
     private Label lblSubValor = new Label("0.00");
-    private Label lblDescuentoValor = new Label("0.00");
     private Label lblImpuestosValor = new Label("0.00");
     private Label lblTotalValor = new Label("0.00");
     private User user;
@@ -216,11 +215,6 @@ public class TabGenFacturas {
         HBox subtotalBox = new HBox(lblSubtotal, lblSubValor);
         subtotalBox.getStyleClass().add("factura-resumen-item");
 
-        Label lblDescuento = new Label("Descuento: ");
-        lblDescuentoValor.getStyleClass().add("factura-values");
-        HBox descuentoBox = new HBox(lblDescuento, lblDescuentoValor);
-        descuentoBox.getStyleClass().add("factura-resumen-item");
-
         Label lblImpuestos = new Label("Impuestos: ");
         lblImpuestosValor.getStyleClass().add("factura-values");
         HBox impuestosBox = new HBox(lblImpuestos, lblImpuestosValor);
@@ -232,14 +226,12 @@ public class TabGenFacturas {
         totalBox.getStyleClass().add("factura-total");
 
         lblSubtotal.getStyleClass().add("factura-resumen-item");
-        lblDescuento.getStyleClass().add("factura-resumen-item");
         lblImpuestos.getStyleClass().add("factura-resumen-item");
 
         lblTotal.getStyleClass().add("factura-total");
 
         HBox resumen = new HBox(
             subtotalBox,
-            descuentoBox,
             impuestosBox,
             totalBox
         );
@@ -248,7 +240,7 @@ public class TabGenFacturas {
         Button btnGenerar = new Button("Generar Factura");
         btnGenerar.getStyleClass().add("button");
 
-        DialogGenerarFactura dialgoGenFactura = new DialogGenerarFactura(this::actualizarResumenFactura, lblTotalValor, lblSubValor, lblDescuentoValor, lblImpuestosValor, this.user, IVA);
+        DialogGenerarFactura dialgoGenFactura = new DialogGenerarFactura(this::actualizarResumenFactura, lblTotalValor, lblSubValor, lblImpuestosValor, this.user, IVA);
 
         dialgoGenFactura.configurarGenerarFactura(
             btnGenerar,
@@ -283,10 +275,6 @@ public class TabGenFacturas {
         lblImpuestosValor.setText(
             String.format("$ %.2f", resumen.impuestos())
             + " (21%)"
-        );
-
-        lblDescuentoValor.setText(
-            String.format("$ %.2f", resumen.descuento())
         );
 
         lblTotalValor.setText(

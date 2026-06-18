@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.facturador.model.Producto;
 import com.facturador.repository.StockRepository;
-import com.facturador.utils.Utils;
 
 public class StockServices {
     private final StockRepository StockRepository;
@@ -17,12 +16,6 @@ public class StockServices {
         if (producto.getName().isBlank() || producto.getPrice() <= 0 || producto.getStock() < 0) {
             throw new IllegalArgumentException("Name no puede estar vacío, price debe ser mayor a 0 y stock no puede ser negativo");
         }
-
-        String code = Utils.generarEAN13(producto.getId());
-
-        producto = producto.toBuilder()
-        .code(code)
-        .build();
 
         this.StockRepository.createStock(producto);
     }

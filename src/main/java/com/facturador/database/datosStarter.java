@@ -16,7 +16,6 @@ public class datosStarter {
     private void insertDefaultUsers() {
         String sql = """
             INSERT INTO users (name, email, password, telefono, domicilio, documento, is_active, role) VALUES
-            ('admin', 'admin', 'admin1234', '2235457919', 'Jose Ingenieros 921', '47563604', true, 'ADMIN'),
             ('Nahuel', 'nahuel@facturador.com', 'PoE0800', '2235457919', 'Jose Ingenieros 921', '47563604', true, 'ADMIN'),
             ('Pardo', 'pardo@facturador.com', 'PoE0800', '2235123456', 'Av. Colón 1234', '30123456', true, 'GERENTE'),
             ('Marcos', 'marcos@facturador.com', 'Bruno2025', '2235234567', 'San Martín 2456', '28987654', true, 'GERENTE'),
@@ -66,37 +65,37 @@ public class datosStarter {
 
     private void insertDefaultProductos() {
         String sql = """
-            INSERT INTO productos (name, description, code, price, stock) VALUES
-            ('Coca Cola 500ml', 'Gaseosa Coca Cola', 'CC500', 1200.00, 50),
-            ('Pepsi 500ml', 'Gaseosa Pepsi', 'PP500', 1100.00, 40),
-            ('Agua Mineral 500ml', 'Agua sin gas', 'AG500', 800.00, 80),
-            ('Sprite 500ml', 'Gaseosa Sprite', 'SP500', 1150.00, 35),
-            ('Fanta Naranja 500ml', 'Gaseosa sabor naranja', 'FN500', 1150.00, 30),
-            ('Papas Fritas Clásicas', 'Snack de papa', 'PF100', 1500.00, 25),
-            ('Papas Fritas BBQ', 'Snack sabor barbacoa', 'PFBBQ', 1600.00, 20),
-            ('Maní Salado', 'Maní tostado y salado', 'MS200', 1300.00, 40),
-            ('Chocolate Milka', 'Chocolate con leche', 'CM100', 1800.00, 30),
-            ('Alfajor Havanna', 'Alfajor de chocolate', 'AH70', 2200.00, 50),
-            ('Galletitas Oreo', 'Galletitas rellenas', 'GO118', 1700.00, 45),
-            ('Yerba Playadito 1kg', 'Yerba mate tradicional', 'YP1K', 4500.00, 20),
-            ('Azúcar Ledesma 1kg', 'Azúcar refinada', 'AL1K', 1400.00, 35),
-            ('Leche La Serenísima 1L', 'Leche entera larga vida', 'LS1L', 1900.00, 40),
-            ('Café Instantáneo Nescafé', 'Café soluble', 'CN170', 5200.00, 15),
-            ('Arroz Gallo 1kg', 'Arroz largo fino', 'AG1K', 2100.00, 25),
-            ('Fideos Matarazzo', 'Spaghetti', 'FM500', 1300.00, 40),
-            ('Atún La Campagnola', 'Atún al natural', 'AT170', 2900.00, 20),
-            ('Aceite Cocinero 900ml', 'Aceite mezcla', 'AC900', 3200.00, 30),
-            ('Sal Dos Anclas 500g', 'Sal fina', 'SA500', 900.00, 50),
-            ('Lavandina Ayudín 1L', 'Lavandina concentrada', 'LA1L', 1500.00, 25),
-            ('Detergente Magistral', 'Detergente limón', 'DM750', 1900.00, 30),
-            ('Papel Higiénico Elite x4', 'Papel doble hoja', 'PH4', 2800.00, 40),
-            ('Servilletas Sussex', 'Pack x100', 'SS100', 1100.00, 30),
-            ('Gaseosa Paso de los Toros', 'Pomelo 500ml', 'PT500', 1250.00, 20),
-            ('Jugo Cepita Naranja', 'Jugo 1L', 'JC1L', 1800.00, 25),
-            ('Energizante Speed', 'Lata 250ml', 'SP250', 1900.00, 20),
-            ('Agua Saborizada Levité', 'Manzana 500ml', 'LV500', 1100.00, 30),
-            ('Caramelos Mogul', 'Bolsa surtida', 'CM250', 1500.00, 20),
-            ('Chicles Beldent', 'Menta', 'CB14', 900.00, 35);     
+            INSERT INTO productos (name, description, price, stock) VALUES
+            ('Coca Cola 500ml', 'Gaseosa Coca Cola', 1200.00, 50),
+            ('Pepsi 500ml', 'Gaseosa Pepsi', 1100.00, 40),
+            ('Agua Mineral 500ml', 'Agua sin gas', 800.00, 80),
+            ('Sprite 500ml', 'Gaseosa Sprite', 1150.00, 35),
+            ('Fanta Naranja 500ml', 'Gaseosa sabor naranja', 1150.00, 30),
+            ('Papas Fritas Clásicas', 'Snack de papa', 1500.00, 25),
+            ('Papas Fritas BBQ', 'Snack sabor barbacoa', 1600.00, 20),
+            ('Maní Salado', 'Maní tostado y salado', 1300.00, 40),
+            ('Chocolate Milka', 'Chocolate con leche', 1800.00, 30),
+            ('Alfajor Havanna', 'Alfajor de chocolate', 2200.00, 50),
+            ('Galletitas Oreo', 'Galletitas rellenas', 1700.00, 45),
+            ('Yerba Playadito 1kg', 'Yerba mate tradicional', 4500.00, 20),
+            ('Azúcar Ledesma 1kg', 'Azúcar refinada', 1400.00, 35),
+            ('Leche La Serenísima 1L', 'Leche entera larga vida', 1900.00, 40),
+            ('Café Instantáneo Nescafé', 'Café soluble', 5200.00, 15),
+            ('Arroz Gallo 1kg', 'Arroz largo fino', 2100.00, 25),
+            ('Fideos Matarazzo', 'Spaghetti', 1300.00, 40),
+            ('Atún La Campagnola', 'Atún al natural', 2900.00, 20),
+            ('Aceite Cocinero 900ml', 'Aceite mezcla', 3200.00, 30),
+            ('Sal Dos Anclas 500g', 'Sal fina', 900.00, 50),
+            ('Lavandina Ayudín 1L', 'Lavandina concentrada', 1500.00, 25),
+            ('Detergente Magistral', 'Detergente limón', 1900.00, 30),
+            ('Papel Higiénico Elite x4', 'Papel doble hoja', 2800.00, 40),
+            ('Servilletas Sussex', 'Pack x100', 1100.00, 30),
+            ('Gaseosa Paso de los Toros', 'Pomelo 500ml', 1250.00, 20),
+            ('Jugo Cepita Naranja', 'Jugo 1L', 1800.00, 25),
+            ('Energizante Speed', 'Lata 250ml', 1900.00, 20),
+            ('Agua Saborizada Levité', 'Manzana 500ml', 1100.00, 30),
+            ('Caramelos Mogul', 'Bolsa surtida', 1500.00, 20),
+            ('Chicles Beldent', 'Menta', 900.00, 35);     
         """;
 
         try (

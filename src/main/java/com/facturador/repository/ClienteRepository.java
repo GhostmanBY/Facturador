@@ -31,14 +31,15 @@ public class ClienteRepository {
     }
 
     public void createCliente(Cliente cliente) {
-        String sql = "INSERT INTO cliente (nombre, domicilio, telefono, email) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO cliente (nombre, documento, domicilio, telefono, email) VALUES (?, ?, ?, ?, ?)";
         try (
             Connection conn = this.db.connect(); 
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, cliente.getNombre());
-            stmt.setString(2, cliente.getDireccion());
-            stmt.setString(3, cliente.getTelefono());
-            stmt.setString(4, cliente.getEmail());
+            stmt.setString(2, cliente.getDocumento());
+            stmt.setString(3, cliente.getDireccion());
+            stmt.setString(4, cliente.getTelefono());
+            stmt.setString(5, cliente.getEmail());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -46,15 +47,16 @@ public class ClienteRepository {
     }
 
     public void updateCliente(Cliente cliente) {
-        String sql = "UPDATE cliente SET nombre = ?, domicilio = ?, telefono = ?, email = ? WHERE id = ?";
+        String sql = "UPDATE cliente SET nombre = IFNULL(?, nombre), documento = IFNULL(?, documento), domicilio = IFNULL(?, domicilio), telefono = IFNULL(?, telefono), email = IFNULL(?, email) WHERE id = ?";
         try (
             Connection conn = this.db.connect(); 
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, cliente.getNombre());
-            stmt.setString(2, cliente.getDireccion());
-            stmt.setString(3, cliente.getTelefono());
-            stmt.setString(4, cliente.getEmail());
-            stmt.setInt(5, cliente.getId());
+            stmt.setString(2, cliente.getDocumento());
+            stmt.setString(3, cliente.getDireccion());
+            stmt.setString(4, cliente.getTelefono());
+            stmt.setString(5, cliente.getEmail());
+            stmt.setInt(6, cliente.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

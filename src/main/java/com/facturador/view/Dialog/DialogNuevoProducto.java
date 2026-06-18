@@ -124,8 +124,7 @@ public class DialogNuevoProducto {
                     .stock(Integer.parseInt(txtStock.getText().trim()));
 
                 if (esEdicion) {
-                    builder.id(productoExistente.getId())
-                    .code(productoExistente.getCode());
+                    builder.id(productoExistente.getId());
                 }
                 return builder.build();
             }

@@ -79,7 +79,7 @@ public class createDB {
                 telefono VARCHAR(50) NOT NULL,
                 domicilio VARCHAR(255) NOT NULL,
                 documento VARCHAR(50) NOT NULL UNIQUE,
-                is_active BOOLEAN NOT NULL,
+                is_active BOOLEAN NOT NULL DEFAULT TRUE,
                 role ENUM('ADMIN', 'GERENTE', 'CAJERO', 'REPOSITOR') NOT NULL
             )
         """;
@@ -98,7 +98,6 @@ public class createDB {
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(150) NOT NULL,
                 description TEXT,
-                code VARCHAR(50) UNIQUE,
                 price DECIMAL(10,2) NOT NULL,
                 stock INT NOT NULL DEFAULT 0,
                 is_active BOOLEAN NOT NULL DEFAULT TRUE

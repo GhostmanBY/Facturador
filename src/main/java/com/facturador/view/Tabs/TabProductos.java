@@ -29,13 +29,13 @@ public class TabProductos {
     private StockController stockController;
     private VBox root;
     private ObservableList<Producto> datos;
+    private TableView<Producto> tabla = new TableView<>();
 
     public TabProductos() {
         this.stockController = new StockController();
     }
 
     public VBox buildProductosTab() {
-        TableView<Producto> tabla = new TableView<>();
         tabla.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         tabla.getStyleClass().add("table-view");
 
@@ -45,9 +45,6 @@ public class TabProductos {
         TableColumn<Producto, String> colDesc = new TableColumn<>("Descripción");
         colDesc.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDescription()));
 
-        TableColumn<Producto, String> colCodigo = new TableColumn<>("Código");
-        colCodigo.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getCode()));
-
         TableColumn<Producto, Double> colPrecio = new TableColumn<>("Precio");
         colPrecio.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getPrice()).asObject());
 
@@ -56,7 +53,6 @@ public class TabProductos {
 
         tabla.getColumns().add(colNombre);
         tabla.getColumns().add(colDesc);
-        tabla.getColumns().add(colCodigo);
         tabla.getColumns().add(colPrecio);
         tabla.getColumns().add(colStock);
 
@@ -172,5 +168,11 @@ public class TabProductos {
 
     public Parent getView() {
         return root;
+    }
+    
+    public void recargarProductos() {
+        List<Producto> listado = this.stockController.getStock();
+        datos = FXCollections.observableArrayList(listado);
+        tabla.setItems(datos);
     }
 }

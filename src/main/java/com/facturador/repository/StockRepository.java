@@ -22,7 +22,6 @@ public class StockRepository {
         .id(resultado.getInt("id"))
         .name(resultado.getString("name"))
         .description(resultado.getString("description"))
-        .code(resultado.getString("code"))
         .price(resultado.getDouble("price"))
         .stock(resultado.getInt("stock"))
         .isActive(resultado.getBoolean("is_active"))
@@ -31,7 +30,7 @@ public class StockRepository {
     }
 
     public void createStock(Producto producto) {
-        String sql = "insert into productos (name ,description, code, price, stock) values (?, ?, ?, ?, ?)";
+        String sql = "insert into productos (name ,description, price, stock) values (?, ?, ?, ?, ?)";
         
         try (
             Connection conn = this.db.connect(); 
@@ -39,9 +38,8 @@ public class StockRepository {
         ) {
             stmt.setString(1, producto.getName());
             stmt.setString(2, producto.getDescription());
-            stmt.setString(3, producto.getCode());
-            stmt.setDouble(4, producto.getPrice());
-            stmt.setInt(5, producto.getStock());
+            stmt.setDouble(3, producto.getPrice());
+            stmt.setInt(4, producto.getStock());
 
             stmt.executeUpdate();
 
@@ -51,18 +49,17 @@ public class StockRepository {
     }
 
     public void modifyStock(Producto producto) {
-        String sql = "UPDATE productos SET name = ?, description = ?, code = ? ,price = ?, stock = ? WHERE id = ?";
-
+        String sql = "UPDATE productos SET name = IFNULL(?, name), description = IFNULL(?, description), price = IFNULL(?, price), stock = IFNULL(?, stock) WHERE id = ?";
+        
         try (
             Connection conn = this.db.connect();
             PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
             stmt.setString(1, producto.getName());
             stmt.setString(2, producto.getDescription());
-            stmt.setString(3, producto.getCode());
-            stmt.setDouble(4, producto.getPrice());
-            stmt.setInt(5, producto.getStock());
-            stmt.setInt(6, producto.getId());
+            stmt.setDouble(3, producto.getPrice());
+            stmt.setInt(4, producto.getStock());
+            stmt.setInt(5, producto.getId());
             
             stmt.executeUpdate();
 

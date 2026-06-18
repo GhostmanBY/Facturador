@@ -54,6 +54,11 @@ public class MainView {
         Tab tabProductos = new Tab("Productos");
         tabProductos.setClosable(false);
         tabProductos.setContent(this.tabProductos.buildProductosTab());
+        tabProductos.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+            if (isSelected) {
+                this.tabProductos.recargarProductos();
+            }
+        });
 
         Tab tabgenfacturas = new Tab("Crear Facturas");
         tabgenfacturas.setClosable(false);
@@ -77,6 +82,11 @@ public class MainView {
         Tab tabadministrador = new Tab("Panel Administrador");
         tabadministrador.setClosable(false);
         tabadministrador.setContent(this.tabadministracion.buildAdministracionTab());
+        tabadministrador.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+            if (isSelected) {
+                this.tabadministracion.recargarData();
+            }
+        });
 
         TabPane tabPane = new TabPane();
 
