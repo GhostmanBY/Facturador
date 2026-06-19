@@ -118,13 +118,11 @@ public class createDB {
     String sql = """
             CREATE TABLE IF NOT EXISTS productos (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                proveedor_id INT NOT NULL,
                 name VARCHAR(150) NOT NULL,
                 description TEXT,
                 price DECIMAL(10,2) NOT NULL,
                 stock INT NOT NULL DEFAULT 0,
-                is_active BOOLEAN NOT NULL DEFAULT TRUE,
-                FOREIGN KEY (proveedor_id) REFERENCES proveedores(id)
+                is_active BOOLEAN NOT NULL DEFAULT TRUE
             )
         """;
 

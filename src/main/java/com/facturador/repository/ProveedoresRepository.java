@@ -22,7 +22,7 @@ public class ProveedoresRepository {
         .id(resultado.getInt("id"))
         .nombre(resultado.getString("nombre"))
         .direccion(resultado.getString("domicilio"))
-        .documento(resultado.getString("cuit"))
+        .cuit(resultado.getString("cuit"))
         .telefono(resultado.getString("telefono"))
         .email(resultado.getString("email"))
         .isActive(resultado.getBoolean("is_active"))

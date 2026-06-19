@@ -3,7 +3,7 @@ package com.facturador.model;
 public class Proveedores {
     private int id;
     private String nombre;
-    private String documento;
+    private String cuit;
     private String direccion;
     private String telefono;
     private String email;
@@ -12,7 +12,7 @@ public class Proveedores {
     public static class Builder {
         private int id;
         private String nombre;
-        private String documento;
+        private String cuit;
         private String direccion;
         private String telefono;
         private String email;
@@ -28,8 +28,8 @@ public class Proveedores {
             return this;
         }
 
-        public Builder documento(String documento) {
-            this.documento = documento;
+        public Builder cuit(String cuit) {
+            this.cuit = cuit;
             return this;
         }
 
@@ -61,7 +61,7 @@ public class Proveedores {
     private Proveedores(Builder builder) {
         this.id = builder.id;
         this.nombre = builder.nombre;
-        this.documento = builder.documento;
+        this.cuit = builder.cuit;
         this.direccion = builder.direccion;
         this.telefono = builder.telefono;
         this.email = builder.email;
@@ -72,7 +72,7 @@ public class Proveedores {
         return new Builder()
         .id(this.id)
         .nombre(this.nombre)
-        .documento(this.documento)
+        .cuit(this.cuit)
         .direccion(this.direccion)
         .telefono(this.telefono)
         .email(this.email)
@@ -83,7 +83,7 @@ public class Proveedores {
 
     public int getId() { return this.id; }
     public String getNombre() { return this.nombre; }
-    public String getCuit() { return this.documento; }
+    public String getCuit() { return this.cuit; }
     public String getDireccion() { return this.direccion; }
     public String getTelefono() { return this.telefono; }
     public String getEmail() { return this.email; }
