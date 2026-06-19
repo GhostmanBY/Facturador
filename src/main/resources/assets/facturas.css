@@ -334,8 +334,8 @@
 }
 
 .detalle-body {
-    -fx-padding: 14;
-    -fx-spacing: 12;
+    -fx-padding: 18;
+    -fx-spacing: 14;
     -fx-background-color: #0a1020;
 }
 

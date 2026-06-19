@@ -75,7 +75,7 @@ public class createDB {
             CREATE TABLE IF NOT EXISTS proveedores (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 nombre VARCHAR(150) NOT NULL,
-                documento VARCHAR(50),
+                cuit VARCHAR(50),
                 email VARCHAR(150),
                 telefono VARCHAR(50),
                 domicilio VARCHAR(255),

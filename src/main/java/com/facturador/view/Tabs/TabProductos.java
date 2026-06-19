@@ -1,9 +1,13 @@
 package com.facturador.view.Tabs;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.facturador.controller.ProveedoreController;
 import com.facturador.controller.StockController;
 import com.facturador.model.Producto;
+import com.facturador.model.Proveedores;
 import com.facturador.view.Dialog.DialogNuevoProducto;
 
 import javafx.beans.property.SimpleDoubleProperty;
@@ -27,12 +31,15 @@ import javafx.scene.layout.VBox;
 
 public class TabProductos {
     private StockController stockController;
+    private ProveedoreController proveedoreController;
     private VBox root;
     private ObservableList<Producto> datos;
     private TableView<Producto> tabla = new TableView<>();
+    private Map<Integer, String> proveedorMap;
 
     public TabProductos() {
         this.stockController = new StockController();
+        this.proveedoreController = new ProveedoreController();
     }
 
     public VBox buildProductosTab() {
@@ -51,10 +58,18 @@ public class TabProductos {
         TableColumn<Producto, Integer> colStock = new TableColumn<>("Stock");
         colStock.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getStock()).asObject());
 
+        cargarMapaProveedores();
+
+        TableColumn<Producto, String> colProveedor = new TableColumn<>("Proveedor");
+        colProveedor.setCellValueFactory(c ->
+            new SimpleStringProperty(proveedorMap.getOrDefault(c.getValue().getProveedorId(), "N/A"))
+        );
+
         tabla.getColumns().add(colNombre);
         tabla.getColumns().add(colDesc);
         tabla.getColumns().add(colPrecio);
         tabla.getColumns().add(colStock);
+        tabla.getColumns().add(colProveedor);
 
         List<Producto> listado = this.stockController.getStock();
         datos = FXCollections.observableArrayList(listado);
@@ -169,10 +184,18 @@ public class TabProductos {
     public Parent getView() {
         return root;
     }
+
+    private void cargarMapaProveedores() {
+        proveedorMap = new HashMap<>();
+        for (Proveedores p : proveedoreController.getProveedores()) {
+            proveedorMap.put(p.getId(), p.getNombre());
+        }
+    }
     
     public void recargarProductos() {
         List<Producto> listado = this.stockController.getStock();
         datos = FXCollections.observableArrayList(listado);
         tabla.setItems(datos);
+        cargarMapaProveedores();
     }
 }

@@ -1,8 +1,8 @@
 package com.facturador.database;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Connection;
 
 public class datosStarter {
     private database db = new database();
@@ -10,6 +10,7 @@ public class datosStarter {
     public datosStarter(){
         insertDefaultUsers();
         insertDefaultClientes();
+        insertDefaulProveedor();
         insertDefaultProductos();
     }
 
@@ -63,39 +64,62 @@ public class datosStarter {
         }
     }
 
+    private void insertDefaulProveedor() {
+        String sql = """
+            INSERT INTO proveedores (nombre, cuit, domicilio, telefono, email) VALUES
+            ('Coca-Cola FEMSA', '30-50001234-5', 'Av. Corrientes 1234', '011-4000-1000', 'ventas@cocacola-femsa.com'),
+            ('PepsiCo Argentina', '30-50005678-9', 'Av. Rivadavia 5678', '011-4000-2000', 'ventas@pepsico.com.ar'),
+            ('Danone Argentina', '30-50009012-3', 'Calle Florida 901', '011-4000-3000', 'ventas@danone.com.ar'),
+            ('Molinos Río de la Plata', '30-50003456-7', 'Av. Alem 456', '011-4000-4000', 'ventas@molinos.com.ar'),
+            ('Arcor S.A.', '30-50007890-1', 'Ruta 9 Km 45', '011-4000-5000', 'ventas@arcor.com'),
+            ('La Serenísima', '30-50001234-6', 'Av. San Martín 789', '011-4000-6000', 'ventas@lserenisima.com.ar'),
+            ('Nestlé Argentina', '30-50005678-0', 'Av. del Libertador 123', '011-4000-7000', 'ventas@nestle.com.ar'),
+            ('Unilever Argentina', '30-50009012-4', 'Av. Callao 456', '011-4000-8000', 'ventas@unilever.com.ar');    
+        """;
+
+        try (
+            Connection conn = this.db.connect();
+            PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.execute();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
     private void insertDefaultProductos() {
         String sql = """
-            INSERT INTO productos (name, description, price, stock) VALUES
-            ('Coca Cola 500ml', 'Gaseosa Coca Cola', 1200.00, 50),
-            ('Pepsi 500ml', 'Gaseosa Pepsi', 1100.00, 40),
-            ('Agua Mineral 500ml', 'Agua sin gas', 800.00, 80),
-            ('Sprite 500ml', 'Gaseosa Sprite', 1150.00, 35),
-            ('Fanta Naranja 500ml', 'Gaseosa sabor naranja', 1150.00, 30),
-            ('Papas Fritas Clásicas', 'Snack de papa', 1500.00, 25),
-            ('Papas Fritas BBQ', 'Snack sabor barbacoa', 1600.00, 20),
-            ('Maní Salado', 'Maní tostado y salado', 1300.00, 40),
-            ('Chocolate Milka', 'Chocolate con leche', 1800.00, 30),
-            ('Alfajor Havanna', 'Alfajor de chocolate', 2200.00, 50),
-            ('Galletitas Oreo', 'Galletitas rellenas', 1700.00, 45),
-            ('Yerba Playadito 1kg', 'Yerba mate tradicional', 4500.00, 20),
-            ('Azúcar Ledesma 1kg', 'Azúcar refinada', 1400.00, 35),
-            ('Leche La Serenísima 1L', 'Leche entera larga vida', 1900.00, 40),
-            ('Café Instantáneo Nescafé', 'Café soluble', 5200.00, 15),
-            ('Arroz Gallo 1kg', 'Arroz largo fino', 2100.00, 25),
-            ('Fideos Matarazzo', 'Spaghetti', 1300.00, 40),
-            ('Atún La Campagnola', 'Atún al natural', 2900.00, 20),
-            ('Aceite Cocinero 900ml', 'Aceite mezcla', 3200.00, 30),
-            ('Sal Dos Anclas 500g', 'Sal fina', 900.00, 50),
-            ('Lavandina Ayudín 1L', 'Lavandina concentrada', 1500.00, 25),
-            ('Detergente Magistral', 'Detergente limón', 1900.00, 30),
-            ('Papel Higiénico Elite x4', 'Papel doble hoja', 2800.00, 40),
-            ('Servilletas Sussex', 'Pack x100', 1100.00, 30),
-            ('Gaseosa Paso de los Toros', 'Pomelo 500ml', 1250.00, 20),
-            ('Jugo Cepita Naranja', 'Jugo 1L', 1800.00, 25),
-            ('Energizante Speed', 'Lata 250ml', 1900.00, 20),
-            ('Agua Saborizada Levité', 'Manzana 500ml', 1100.00, 30),
-            ('Caramelos Mogul', 'Bolsa surtida', 1500.00, 20),
-            ('Chicles Beldent', 'Menta', 900.00, 35);     
+            INSERT INTO productos (proveedor_id, name, description, price, stock) VALUES
+            (1, 'Coca Cola 500ml', 'Gaseosa Coca Cola', 1200.00, 50),
+            (2, 'Pepsi 500ml', 'Gaseosa Pepsi', 1100.00, 40),
+            (8, 'Agua Mineral 500ml', 'Agua sin gas', 800.00, 80),
+            (1, 'Sprite 500ml', 'Gaseosa Sprite', 1150.00, 35),
+            (1, 'Fanta Naranja 500ml', 'Gaseosa sabor naranja', 1150.00, 30),
+            (2, 'Papas Fritas Clásicas', 'Snack de papa', 1500.00, 25),
+            (2, 'Papas Fritas BBQ', 'Snack sabor barbacoa', 1600.00, 20),
+            (5, 'Maní Salado', 'Maní tostado y salado', 1300.00, 40),
+            (7, 'Chocolate Milka', 'Chocolate con leche', 1800.00, 30),
+            (5, 'Alfajor Havanna', 'Alfajor de chocolate', 2200.00, 50),
+            (7, 'Galletitas Oreo', 'Galletitas rellenas', 1700.00, 45),
+            (5, 'Yerba Playadito 1kg', 'Yerba mate tradicional', 4500.00, 20),
+            (5, 'Azúcar Ledesma 1kg', 'Azúcar refinada', 1400.00, 35),
+            (6, 'Leche La Serenísima 1L', 'Leche entera larga vida', 1900.00, 40),
+            (7, 'Café Instantáneo Nescafé', 'Café soluble', 5200.00, 15),
+            (4, 'Arroz Gallo 1kg', 'Arroz largo fino', 2100.00, 25),
+            (4, 'Fideos Matarazzo', 'Spaghetti', 1300.00, 40),
+            (4, 'Atún La Campagnola', 'Atún al natural', 2900.00, 20),
+            (4, 'Aceite Cocinero 900ml', 'Aceite mezcla', 3200.00, 30),
+            (4, 'Sal Dos Anclas 500g', 'Sal fina', 900.00, 50),
+            (8, 'Lavandina Ayudín 1L', 'Lavandina concentrada', 1500.00, 25),
+            (8, 'Detergente Magistral', 'Detergente limón', 1900.00, 30),
+            (8, 'Papel Higiénico Elite x4', 'Papel doble hoja', 2800.00, 40),
+            (8, 'Servilletas Sussex', 'Pack x100', 1100.00, 30),
+            (2, 'Gaseosa Paso de los Toros', 'Pomelo 500ml', 1250.00, 20),
+            (3, 'Jugo Cepita Naranja', 'Jugo 1L', 1800.00, 25),
+            (2, 'Energizante Speed', 'Lata 250ml', 1900.00, 20),
+            (3, 'Agua Saborizada Levité', 'Manzana 500ml', 1100.00, 30),
+            (5, 'Caramelos Mogul', 'Bolsa surtida', 1500.00, 20),
+            (5, 'Chicles Beldent', 'Menta', 900.00, 35);  
         """;
 
         try (

@@ -22,7 +22,7 @@ public class LoginView {
         this.authController = new AuthController();
         this.alert = new ErrorAlert();
 
-        Label title = new Label("Mega Facturador++");
+        Label title = new Label("Mega Facturador");
         title.getStyleClass().add("label-title");
 
         VBox cardTitle = new VBox(6, title);

@@ -3,11 +3,13 @@ package com.facturador.view.Tabs;
 import com.facturador.controller.ClienteController;
 import com.facturador.controller.FacturaController;
 import com.facturador.controller.ProductFController;
+import com.facturador.controller.ProveedoreController;
 import com.facturador.controller.StockController;
 import com.facturador.model.Cliente;
 import com.facturador.model.Factura;
 import com.facturador.model.ProductFactura;
 import com.facturador.model.Producto;
+import com.facturador.model.Proveedores;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,13 +33,17 @@ import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TabViewFacturas {
     private FacturaController facturaController;
     private ProductFController productFController;
     private StockController stockController;
     private ClienteController clienteController;
+    private ProveedoreController proveedoreController;
+    private Map<Integer, String> productoProveedorMap;
 
     private VBox panelDetalle;
     private Label lblDetalleTitulo;
@@ -60,6 +66,7 @@ public class TabViewFacturas {
         this.clienteController = new ClienteController();
         this.productFController = new ProductFController();
         this.stockController = new StockController();
+        this.proveedoreController = new ProveedoreController();
     }
 
     public Parent buildViewFacturasTab() {
@@ -230,9 +237,9 @@ public class TabViewFacturas {
     private VBox buildPanelDetalle() {
         VBox panel = new VBox(0);
         panel.getStyleClass().add("detalle-panel");
-        panel.setPrefWidth(300);
-        panel.setMinWidth(300);
-        panel.setMaxWidth(300);
+        panel.setPrefWidth(400);
+        panel.setMinWidth(380);
+        panel.setMaxWidth(450);
 
         // Header
         HBox header = new HBox();
@@ -251,7 +258,7 @@ public class TabViewFacturas {
         header.getChildren().addAll(lblDetalleTitulo, spacer, btnCerrar);
 
         // Body con scroll
-        VBox body = new VBox(12);
+        VBox body = new VBox(16);
         body.getStyleClass().add("detalle-body");
 
         // Meta info
@@ -273,11 +280,20 @@ public class TabViewFacturas {
         tablaItems.getStyleClass().add("detalle-tabla");
         tablaItems.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
         tablaItems.setFixedCellSize(36);
-        tablaItems.setPrefHeight(150);
+        tablaItems.setPrefHeight(220);
 
         TableColumn<ProductFactura, String> colNombre = new TableColumn<>("Producto");
         colNombre.setCellValueFactory(new PropertyValueFactory<>("name"));
         colNombre.getStyleClass().add("col-producto");
+
+        TableColumn<ProductFactura, String> colProveedor = new TableColumn<>("Proveedor");
+        colProveedor.setCellValueFactory(c ->
+            new javafx.beans.property.SimpleStringProperty(
+                productoProveedorMap != null
+                    ? productoProveedorMap.getOrDefault(c.getValue().getProductoid(), "N/A")
+                    : "N/A"
+            )
+        );
 
         TableColumn<ProductFactura, Integer> colCantidad = new TableColumn<>("Cant.");
         colCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
@@ -289,6 +305,7 @@ public class TabViewFacturas {
         tablaItems.getColumns().add(colNombre);
         tablaItems.getColumns().add(colCantidad);
         tablaItems.getColumns().add(colSubtotal);
+        tablaItems.getColumns().add(colProveedor);
 
         // Totales
         Label lblTotalesTitle = new Label("RESUMEN");
@@ -344,12 +361,25 @@ public class TabViewFacturas {
         lblDetalleCliente.setText(cliente.getNombre());
         lblDetalleFecha.setText(factura.getFecha().format(FORMATTER));
 
-        tablaItems.setItems(FXCollections.observableArrayList(factura.getDetalles()));
-        tablaItems.setPrefHeight(Math.min(factura.getDetalles().size() * 36 + 36, 200));
+        productoProveedorMap = new HashMap<>();
+        for (ProductFactura item : factura.getDetalles()) {
+            Producto prod = stockController.getStockById(item.getProductoid());
+            if (prod != null) {
+                Proveedores prov = proveedoreController.getProveedoreById(prod.getProveedorId());
+                productoProveedorMap.put(prod.getId(), prov != null ? prov.getNombre() : "N/A");
+            }
+        }
 
-        lblSubtotalVal.setText(formatMoney(factura.getSubtotal()));
-        lblDescuentoVal.setText("-" + formatMoney(factura.getDescuento()));
-        lblImpuestosVal.setText(formatMoney(factura.getImpuestos()));
+        tablaItems.setItems(FXCollections.observableArrayList(factura.getDetalles()));
+        tablaItems.setPrefHeight(Math.min(factura.getDetalles().size() * 36 + 36, 300));
+
+        double subtotal = factura.getSubtotal();
+        double descuento = factura.getDescuento();
+        double descPct = subtotal > 0 ? (descuento / subtotal * 100) : 0;
+
+        lblSubtotalVal.setText(formatMoney(subtotal));
+        lblDescuentoVal.setText("-" + formatMoney(descuento) + " (" + String.format("%.0f", descPct) + "%)");
+        lblImpuestosVal.setText(formatMoney(factura.getImpuestos()) + " (21%)");
         lblTotalVal.setText(formatMoney(factura.getTotal()));
 
         panelDetalle.setVisible(true);

@@ -22,7 +22,7 @@ public class ProveedoresRepository {
         .id(resultado.getInt("id"))
         .nombre(resultado.getString("nombre"))
         .direccion(resultado.getString("domicilio"))
-        .documento(resultado.getString("documento"))
+        .documento(resultado.getString("cuit"))
         .telefono(resultado.getString("telefono"))
         .email(resultado.getString("email"))
         .isActive(resultado.getBoolean("is_active"))
@@ -31,12 +31,12 @@ public class ProveedoresRepository {
     }
 
     public void createProveedore(Proveedores proveedor) {
-        String sql = "INSERT INTO proveedores (nombre, documento, domicilio, telefono, email) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO proveedores (nombre, cuit, domicilio, telefono, email) VALUES (?, ?, ?, ?, ?)";
         try (
             Connection conn = this.db.connect(); 
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, proveedor.getNombre());
-            stmt.setString(2, proveedor.getDocumento());
+            stmt.setString(2, proveedor.getCuit());
             stmt.setString(3, proveedor.getDireccion());
             stmt.setString(4, proveedor.getTelefono());
             stmt.setString(5, proveedor.getEmail());
@@ -47,12 +47,12 @@ public class ProveedoresRepository {
     }
 
     public void updateProveedore(Proveedores proveedore) {
-        String sql = "UPDATE proveedores SET nombre = IFNULL(?, nombre), documento = IFNULL(?, documento), domicilio = IFNULL(?, domicilio), telefono = IFNULL(?, telefono), email = IFNULL(?, email) WHERE id = ?";
+        String sql = "UPDATE proveedores SET nombre = IFNULL(?, nombre), cuit = IFNULL(?, cuit), domicilio = IFNULL(?, domicilio), telefono = IFNULL(?, telefono), email = IFNULL(?, email) WHERE id = ?";
         try (
             Connection conn = this.db.connect(); 
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, proveedore.getNombre());
-            stmt.setString(2, proveedore.getDocumento());
+            stmt.setString(2, proveedore.getCuit());
             stmt.setString(3, proveedore.getDireccion());
             stmt.setString(4, proveedore.getTelefono());
             stmt.setString(5, proveedore.getEmail());

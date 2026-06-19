@@ -83,7 +83,7 @@ public class Proveedores {
 
     public int getId() { return this.id; }
     public String getNombre() { return this.nombre; }
-    public String getDocumento() { return this.documento; }
+    public String getCuit() { return this.documento; }
     public String getDireccion() { return this.direccion; }
     public String getTelefono() { return this.telefono; }
     public String getEmail() { return this.email; }

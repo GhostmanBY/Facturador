@@ -2,6 +2,7 @@ package com.facturador.model;
 
 public class Producto {
     private int id;
+    private int proveedorId;
     private String name;
     private String description;
     private double price;
@@ -10,6 +11,7 @@ public class Producto {
 
     public static class Builder {
         private int id;
+        private int proveedorId;
         private String name;
         private String description;
         private double price;
@@ -17,6 +19,11 @@ public class Producto {
         private boolean is_active;
         public Builder id(int id) {
             this.id = id;
+            return this;
+        }
+
+        public Builder proveedorId(int proveedorId) {
+            this.proveedorId = proveedorId;
             return this;
         }
 
@@ -52,6 +59,7 @@ public class Producto {
 
     private Producto(Builder builder) {
         this.id = builder.id;
+        this.proveedorId = builder.proveedorId;
         this.name = builder.name;
         this.description = builder.description;
         this.price = builder.price;
@@ -62,6 +70,7 @@ public class Producto {
     public Builder toBuilder() {
         return new Builder()
         .id(this.id)
+        .proveedorId(this.proveedorId)
         .name(this.name)
         .description(this.description)
         .price(this.price)
@@ -72,6 +81,7 @@ public class Producto {
     public static Builder builder() { return new Builder(); }
 
     public int getId() {return this.id; }
+    public int getProveedorId() {return this.proveedorId; }
     public String getName() {return this.name; }
     public String getDescription() {return this.description; }
     public double getPrice() {return this.price; }

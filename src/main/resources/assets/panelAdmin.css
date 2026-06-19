@@ -34,6 +34,13 @@
     -fx-font-weight: bold;
 }
 
+.admin-stat-value-purple {
+    -fx-text-fill: #a855f7;
+    -fx-font-family: "JetBrains Mono Nerd Font";
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
 /* ── Panel contenedor ── */
 .admin-panel {
     -fx-background-color: #0f172a;

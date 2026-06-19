@@ -5,11 +5,14 @@ import java.util.Optional;
 
 import com.facturador.controller.ClienteController;
 import com.facturador.controller.FacturaController;
+import com.facturador.controller.ProveedoreController;
 import com.facturador.controller.UserController;
 import com.facturador.model.Cliente;
+import com.facturador.model.Proveedores;
 import com.facturador.model.User;
 import com.facturador.model.User.UserRole;
 import com.facturador.view.Dialog.DialogNuevoCliente;
+import com.facturador.view.Dialog.DialogNuevoProveedor;
 import com.facturador.view.Dialog.DialogNuevoUsuario;
 import com.facturador.view.Helpers.ErrorAlert;
 import com.facturador.service.AuthServices;
@@ -34,10 +37,13 @@ public class TabAdministracion {
     private Label totalFacturasLabel;
     private Label totalUsuariosLabel;
     private Label totalClientesLabel;
+    private Label totalProveedoresLabel;
     private TableView<User> tabla_user;
     TableView<Cliente> tabla_cliente;
+    private TableView<Proveedores> tabla_proveedor;
     private UserController userController;
     private ClienteController clienteController;
+    private ProveedoreController proveedoreController;
     private FacturaController facturaController;
     private ErrorAlert alert = new ErrorAlert();
     private AuthServices authServices = AuthServices.getInstance();
@@ -45,6 +51,7 @@ public class TabAdministracion {
     public TabAdministracion() {
         this.userController = new UserController();
         this.clienteController = new ClienteController();
+        this.proveedoreController = new ProveedoreController();
         this.facturaController = new FacturaController();
     }
 
@@ -58,31 +65,38 @@ public class TabAdministracion {
         int totalFacturas = facturaController.getFactura().size();
         int totalUsuarios = userController.getUser().size();
         int totalClientes = clienteController.getClientes().size();
+        int totalProveedores = proveedoreController.getProveedores().size();
 
         totalFacturasLabel = new Label(String.valueOf(totalFacturas));
         totalUsuariosLabel = new Label(String.valueOf(totalUsuarios));
         totalClientesLabel = new Label(String.valueOf(totalClientes));
+        totalProveedoresLabel = new Label(String.valueOf(totalProveedores));
 
         HBox statsRow = new HBox(12);
         statsRow.getStyleClass().add("admin-stats-row");
 
         statsRow.getChildren().addAll(
-            buildStatBox("TOTAL FACTURAS",  totalFacturasLabel,  "admin-stat-value"),
-            buildStatBox("TOTAL USUARIOS",  totalUsuariosLabel,  "admin-stat-value-blue"),
-            buildStatBox("TOTAL CLIENTES",  totalClientesLabel,  "admin-stat-value-amber")
+            buildStatBox("TOTAL FACTURAS",    totalFacturasLabel,     "admin-stat-value"),
+            buildStatBox("TOTAL USUARIOS",    totalUsuariosLabel,     "admin-stat-value-blue"),
+            buildStatBox("TOTAL CLIENTES",    totalClientesLabel,     "admin-stat-value-amber"),
+            buildStatBox("TOTAL PROVEEDORES", totalProveedoresLabel,  "admin-stat-value-purple")
         );
 
         // ── Tablas ────────────────────────────────────────────────────
-        HBox tablesRow = new HBox(12);
-        VBox.setVgrow(tablesRow, Priority.ALWAYS);
+        VBox tablesContainer = new VBox(12);
+        VBox.setVgrow(tablesContainer, Priority.ALWAYS);
 
+        HBox row1 = new HBox(12);
         VBox panelUsuarios = buildPanelUsuarios();
         VBox panelClientes = buildPanelClientes();
         HBox.setHgrow(panelUsuarios, Priority.ALWAYS);
         HBox.setHgrow(panelClientes, Priority.ALWAYS);
+        row1.getChildren().addAll(panelUsuarios, panelClientes);
 
-        tablesRow.getChildren().addAll(panelUsuarios, panelClientes);
-        root.getChildren().addAll(statsRow, tablesRow);
+        VBox panelProveedores = buildPanelProveedores();
+
+        tablesContainer.getChildren().addAll(row1, panelProveedores);
+        root.getChildren().addAll(statsRow, tablesContainer);
         return root;
     }
 
@@ -93,6 +107,7 @@ public class TabAdministracion {
 
         Label labelEtiqueta = new Label(etiqueta);
         labelEtiqueta.getStyleClass().add("admin-stat-label");
+        labelValor.getStyleClass().add(estiloValor);
 
         contenedor.getChildren().addAll(labelEtiqueta, labelValor);
         return contenedor;
@@ -330,6 +345,111 @@ public class TabAdministracion {
         return panel;
     }
 
+    // ── Panel Proveedores ──────────────────────────────────────────────
+    private VBox buildPanelProveedores() {
+        ObservableList<Proveedores> proveedores = FXCollections.observableArrayList(proveedoreController.getProveedores());
+
+        VBox panel = new VBox(0);
+        panel.getStyleClass().add("admin-panel");
+
+        HBox header = buildPanelHeader("Proveedores", () -> {
+            DialogNuevoProveedor dialogo = new DialogNuevoProveedor();
+            Optional<Proveedores> nuevo = dialogo.mostrarDialogo();
+            nuevo.ifPresent(p -> {
+                proveedores.setAll(proveedoreController.getProveedores());
+            });
+        });
+
+        tabla_proveedor = new TableView<>(proveedores);
+        tabla_proveedor.getStyleClass().add("admin-table");
+        tabla_proveedor.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+        VBox.setVgrow(tabla_proveedor, Priority.ALWAYS);
+
+        TableColumn<Proveedores, String> colNombre = new TableColumn<>("Nombre");
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+
+        TableColumn<Proveedores, String> colCuit = new TableColumn<>("CUIT");
+        colCuit.setCellValueFactory(new PropertyValueFactory<>("cuit"));
+        colCuit.setPrefWidth(120);
+
+        TableColumn<Proveedores, String> colTelefono = new TableColumn<>("Teléfono");
+        colTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
+        colTelefono.setPrefWidth(100);
+
+        TableColumn<Proveedores, String> colEmail = new TableColumn<>("Email");
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colEmail.setPrefWidth(150);
+
+        TableColumn<Proveedores, Boolean> colEstado = new TableColumn<>("Estado");
+        colEstado.setCellValueFactory(new PropertyValueFactory<>("active"));
+        colEstado.setPrefWidth(80);
+        colEstado.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(Boolean active, boolean empty) {
+                super.updateItem(active, empty);
+                if (empty || active == null) { setGraphic(null); return; }
+                Label badge = new Label(active ? "Activo" : "Inactivo");
+                badge.getStyleClass().add(active ? "badge-active" : "badge-inactive");
+                setGraphic(badge);
+                setText(null);
+            }
+        });
+
+        TableColumn<Proveedores, Void> colAcciones = new TableColumn<>("");
+        colAcciones.setPrefWidth(110);
+        colAcciones.setCellFactory(col -> new TableCell<>() {
+            private final Button btnEditar = new Button("Editar");
+            private final Button btnToggle = new Button();
+            private final HBox box = new HBox(6, btnEditar, btnToggle);
+
+            {
+                btnEditar.getStyleClass().add("table-btn-edit");
+                btnToggle.getStyleClass().add("table-btn-toggle");
+                box.setAlignment(Pos.CENTER);
+
+                btnEditar.setOnAction(e -> {
+                    Proveedores p = getTableView().getItems().get(getIndex());
+                    DialogNuevoProveedor editar = new DialogNuevoProveedor(p);
+                    Optional<Proveedores> editado = editar.mostrarDialogo();
+                    editado.ifPresent(pr -> {
+                        tabla_proveedor.getItems().setAll(proveedoreController.getProveedores());
+                    });
+                });
+
+                btnToggle.setOnAction(e -> {
+                    Proveedores p = getTableView().getItems().get(getIndex());
+                    if (p.isActive()) {
+                        proveedoreController.desactivarProveedore(p);
+                    } else {
+                        proveedoreController.activarProveedore(p);
+                    }
+                    tabla_proveedor.getItems().setAll(proveedoreController.getProveedores());
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) { setGraphic(null); return; }
+                Proveedores p = getTableView().getItems().get(getIndex());
+                btnToggle.setText(p.isActive() ? "Desactivar" : "Activar");
+                btnToggle.getStyleClass().removeAll("table-btn-deactivate", "table-btn-activate");
+                btnToggle.getStyleClass().add(p.isActive() ? "table-btn-deactivate" : "table-btn-activate");
+                setGraphic(box);
+            }
+        });
+
+        tabla_proveedor.getColumns().add(colNombre);
+        tabla_proveedor.getColumns().add(colCuit);
+        tabla_proveedor.getColumns().add(colTelefono);
+        tabla_proveedor.getColumns().add(colEmail);
+        tabla_proveedor.getColumns().add(colEstado);
+        tabla_proveedor.getColumns().add(colAcciones);
+        panel.getChildren().add(header);
+        panel.getChildren().add(tabla_proveedor);
+        return panel;
+    }
+
     // ── Helper header de panel ────────────────────────────────────────
     private HBox buildPanelHeader(String titulo, Runnable onAgregar) {
         HBox header = new HBox();
@@ -356,13 +476,18 @@ public class TabAdministracion {
 
         ObservableList<User> users = FXCollections.observableArrayList(this.userController.getUser());
         tabla_user.setItems(users);
+
+        ObservableList<Proveedores> proveedores = FXCollections.observableArrayList(this.proveedoreController.getProveedores());
+        tabla_proveedor.setItems(proveedores);
         
         int totalFacturas = facturaController.getFactura().size();
         int totalUsuarios = userController.getUser().size();
         int totalClientes = clienteController.getClientes().size();
+        int totalProveedores = proveedoreController.getProveedores().size();
 
         totalFacturasLabel.setText(String.valueOf(totalFacturas));
         totalUsuariosLabel.setText(String.valueOf(totalUsuarios));
         totalClientesLabel.setText(String.valueOf(totalClientes));
+        totalProveedoresLabel.setText(String.valueOf(totalProveedores));
     }
 }

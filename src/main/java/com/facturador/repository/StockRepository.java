@@ -20,6 +20,7 @@ public class StockRepository {
     private Producto mapProducto(ResultSet resultado) throws SQLException {
         Producto producto = new Producto.Builder()
         .id(resultado.getInt("id"))
+        .proveedorId(resultado.getInt("proveedor_id"))
         .name(resultado.getString("name"))
         .description(resultado.getString("description"))
         .price(resultado.getDouble("price"))
@@ -30,16 +31,17 @@ public class StockRepository {
     }
 
     public void createStock(Producto producto) {
-        String sql = "insert into productos (name ,description, price, stock) values (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO productos (proveedor_id, name, description, price, stock) VALUES (?, ?, ?, ?, ?)";
         
         try (
             Connection conn = this.db.connect(); 
             PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
-            stmt.setString(1, producto.getName());
-            stmt.setString(2, producto.getDescription());
-            stmt.setDouble(3, producto.getPrice());
-            stmt.setInt(4, producto.getStock());
+            stmt.setInt(1, producto.getProveedorId());
+            stmt.setString(2, producto.getName());
+            stmt.setString(3, producto.getDescription());
+            stmt.setDouble(4, producto.getPrice());
+            stmt.setInt(5, producto.getStock());
 
             stmt.executeUpdate();
 
@@ -49,17 +51,18 @@ public class StockRepository {
     }
 
     public void modifyStock(Producto producto) {
-        String sql = "UPDATE productos SET name = IFNULL(?, name), description = IFNULL(?, description), price = IFNULL(?, price), stock = IFNULL(?, stock) WHERE id = ?";
+        String sql = "UPDATE productos SET proveedor_id = IFNULL(?, proveedor_id), name = IFNULL(?, name), description = IFNULL(?, description), price = IFNULL(?, price), stock = IFNULL(?, stock) WHERE id = ?";
         
         try (
             Connection conn = this.db.connect();
             PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
-            stmt.setString(1, producto.getName());
-            stmt.setString(2, producto.getDescription());
-            stmt.setDouble(3, producto.getPrice());
-            stmt.setInt(4, producto.getStock());
-            stmt.setInt(5, producto.getId());
+            stmt.setInt(1, producto.getProveedorId());
+            stmt.setString(2, producto.getName());
+            stmt.setString(3, producto.getDescription());
+            stmt.setDouble(4, producto.getPrice());
+            stmt.setInt(5, producto.getStock());
+            stmt.setInt(6, producto.getId());
             
             stmt.executeUpdate();
 
