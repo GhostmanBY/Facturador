@@ -14,6 +14,7 @@ public class createDB {
 
     public void createTables() throws SQLException {
         createClienteTable();
+        createProveedoresTable();
         createUsersTable();
         createProductosTable();
         createFacturasTable();
@@ -69,6 +70,27 @@ public class createDB {
         }
     }
 
+    private void createProveedoresTable() throws SQLException {
+        String sql = """
+            CREATE TABLE IF NOT EXISTS proveedores (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                nombre VARCHAR(150) NOT NULL,
+                documento VARCHAR(50),
+                email VARCHAR(150),
+                telefono VARCHAR(50),
+                domicilio VARCHAR(255),
+                is_active BOOLEAN NOT NULL DEFAULT TRUE
+            )
+        """;
+
+        try (
+            Connection conn = db.connect();
+            PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.execute();
+        }
+    }
+
     private void createUsersTable() throws SQLException {
         String sql = """
             CREATE TABLE IF NOT EXISTS users (
@@ -96,11 +118,13 @@ public class createDB {
     String sql = """
             CREATE TABLE IF NOT EXISTS productos (
                 id INT AUTO_INCREMENT PRIMARY KEY,
+                proveedor_id INT NOT NULL,
                 name VARCHAR(150) NOT NULL,
                 description TEXT,
                 price DECIMAL(10,2) NOT NULL,
                 stock INT NOT NULL DEFAULT 0,
-                is_active BOOLEAN NOT NULL DEFAULT TRUE
+                is_active BOOLEAN NOT NULL DEFAULT TRUE,
+                FOREIGN KEY (proveedor_id) REFERENCES proveedores(id)
             )
         """;
 
