@@ -1,11 +1,1 @@
-### Comandas
-- jpackage \                                                                             ✔  48s   01:24:56  
-  --input target/ \
-  --name Facturador \
-  --main-jar facturador-1.0-SNAPSHOT.jar \
-  --main-class com.facturador.Launcher \
-  --type app-image \
-  --dest build/ \
-  --module-path /opt/javafx/javafx-sdk-21.0.11/lib \
-  --add-modules javafx.controls,javafx.fxml,java.sql \
-  --java-options "-Djava.library.path=/opt/javafx/javafx-sdk-21.0.11/lib"
+
