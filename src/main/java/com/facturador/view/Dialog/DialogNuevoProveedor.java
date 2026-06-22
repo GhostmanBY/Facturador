@@ -120,7 +120,7 @@ public class DialogNuevoProveedor {
 
             Proveedores.Builder builder = Proveedores.builder()
                 .nombre(nombre)
-                .documento(cuit)
+                .cuit(cuit)
                 .direccion(direccion)
                 .telefono(telefono)
                 .email(email)

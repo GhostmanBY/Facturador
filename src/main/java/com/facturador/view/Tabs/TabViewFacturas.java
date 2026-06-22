@@ -279,8 +279,8 @@ public class TabViewFacturas {
         tablaItems = new TableView<>();
         tablaItems.getStyleClass().add("detalle-tabla");
         tablaItems.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
-        tablaItems.setFixedCellSize(36);
-        tablaItems.setPrefHeight(220);
+        tablaItems.setFixedCellSize(48);
+        tablaItems.setPrefHeight(440);
 
         TableColumn<ProductFactura, String> colNombre = new TableColumn<>("Producto");
         colNombre.setCellValueFactory(new PropertyValueFactory<>("name"));

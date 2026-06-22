@@ -285,6 +285,9 @@ public class TabGenFacturas {
     public void recargarProductos() {
         List<Producto> listado = this.stockController.getStock()
         .stream()
+        .peek(producto -> {
+            if (producto.getStock() <= 0) { this.stockController.deactivateStock(producto.getId()); }
+        })
         .filter(producto -> producto.getIsActive())
         .toList();
 

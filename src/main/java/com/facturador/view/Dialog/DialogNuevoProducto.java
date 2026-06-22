@@ -1,8 +1,10 @@
 package com.facturador.view.Dialog;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.facturador.controller.ProveedoreController;
+import com.facturador.controller.StockController;
 import com.facturador.model.Producto;
 import com.facturador.model.Proveedores;
 import com.facturador.view.Helpers.ErrorAlert;
@@ -29,11 +31,13 @@ public class DialogNuevoProducto {
     private final Producto productoExistente;
     private ErrorAlert alert;
     private ProveedoreController proveedoreController;
+    private StockController stockController;
 
     public DialogNuevoProducto() {
         this.productoExistente = null;
         this.alert = new ErrorAlert();
         this.proveedoreController = new ProveedoreController();
+        this.stockController = new StockController();
     }
 
     public DialogNuevoProducto(Producto producto) {
@@ -175,6 +179,17 @@ public class DialogNuevoProducto {
 
         dialog.setResultConverter(buttonType -> {
             if (buttonType == btnGuardar) {
+                boolean existe = this.stockController.getStock()
+                    .stream()
+                    .anyMatch(producto ->
+                        producto.getName().equalsIgnoreCase(txtNombre.getText().trim())
+                    );
+
+                if (existe) {
+                    this.alert.mostrarError("No se puede crear un producto con el mismo nombre");
+                    return null;
+                }
+
                 int proveedorId = 0;
                 String selected = cbProveedores.getSelectionModel().getSelectedItem();
                 if (selected != null) {
