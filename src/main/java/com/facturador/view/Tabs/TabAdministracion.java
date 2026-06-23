@@ -183,6 +183,13 @@ public class TabAdministracion {
                 btnToggle.setOnAction(e -> {
                     User seleccionado = getTableView().getItems().get(getIndex());
                     User actual = authServices.getUserActual();
+                    
+                    if (actual.getRole() == UserRole.ADMIN) {
+                        if (seleccionado.getRole() == UserRole.ADMIN) {
+                            alert.mostrarError("No puede deshabilitar usuarios con su mismo rol");
+                            return;
+                        }
+                    }
 
                     if (actual.getRole() == UserRole.GERENTE) {
                         if (seleccionado.getRole() == UserRole.ADMIN) {
