@@ -56,7 +56,7 @@ public class UserRepository {
     }
     
     public void modifyUser(User user) {
-        String sql = "UPDATE users SET name = IFNULL(?, name), domicilio = IFNULL(?, domicilio), telefono = IFNULL(?, telefono), password = IFNULL(?, password) WHERE id = ?";
+        String sql = "UPDATE users SET name = IFNULL(?, name), domicilio = IFNULL(?, domicilio), telefono = IFNULL(?, telefono), password = IFNULL(?, password), role = IFNULL(?, role) WHERE id = ?";
 
         try (
             Connection conn = this.db.connect();
@@ -66,7 +66,8 @@ public class UserRepository {
             stmt.setString(2, user.getDomicilio());
             stmt.setString(3, user.getTelefono());
             stmt.setString(4, user.getHashPassword());
-            stmt.setInt(5, user.getId());
+            stmt.setString(5, user.getRole().toString());
+            stmt.setInt(6, user.getId());
             
             stmt.executeUpdate();
 

@@ -44,7 +44,7 @@ public class DialogEditarProductoFactura {
                     ProductFactura item = row.getItem();
                     Producto producto_now = this.tablaProductos.getItems()
                     .stream()
-                    .filter(producto -> producto.getId() == item.getId())
+                    .filter(producto -> producto.getId() == item.getProductoid())
                     .findFirst()
                     .orElse(null);
                     Optional<DProFactura> dialog = this.dialoghelp.mostrarDialogoProducto(

@@ -44,6 +44,7 @@ public class DialogNuevoProducto {
         this.productoExistente = producto;
         this.alert = new ErrorAlert();
         this.proveedoreController = new ProveedoreController();
+        this.stockController = new StockController();
     }
 
     public Optional<Producto> abrirDialog() {
@@ -179,15 +180,17 @@ public class DialogNuevoProducto {
 
         dialog.setResultConverter(buttonType -> {
             if (buttonType == btnGuardar) {
-                boolean existe = this.stockController.getStock()
-                    .stream()
-                    .anyMatch(producto ->
-                        producto.getName().equalsIgnoreCase(txtNombre.getText().trim())
-                    );
+                if (!esEdicion){
+                    boolean existe = this.stockController.getStock()
+                        .stream()
+                        .anyMatch(producto ->
+                            producto.getName().equalsIgnoreCase(txtNombre.getText().trim())
+                        );
 
-                if (existe) {
-                    this.alert.mostrarError("No se puede crear un producto con el mismo nombre");
-                    return null;
+                    if (existe) {
+                        this.alert.mostrarError("No se puede crear un producto con el mismo nombre");
+                        return null;
+                    }
                 }
 
                 int proveedorId = 0;
